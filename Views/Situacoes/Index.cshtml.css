@@ -1,0 +1,67 @@
+﻿main#container > header {
+    position: fixed;
+    top: 0;
+    right: 33px;
+    background: linear-gradient(to bottom, var(--background) 80%, transparent);
+    width: calc(100% - 130px - 33px);
+    padding-block: 20px;
+    z-index: 1;
+}
+
+    main#container > header > div {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        height: 60px;
+        background: var(--foreground);
+        padding-inline: 20px;
+    }
+
+    main#container > header > .searchbar {
+        border-radius: 10px;
+    }
+
+        main#container > header > .searchbar > .btn-default {
+            margin-left: auto;
+        }
+
+main#container > section {
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(100% - 17px);
+    gap: 40px;
+    margin-block: 90px 20px;
+}
+
+table > tbody td > span {
+    width: 12px;
+    height: 12px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+main#contaier table > tbody > tr:hover > td > div {
+    visibility: visible;
+}
+
+main#container table button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    background: transparent;
+    border: none;
+    transition: background .3s;
+}
+
+    main#container table button:hover {
+        background: var(--foreground-hover);
+        transition: background .3s;
+    }
+
+    main#container table button svg {
+        color: var(--text);
+        width: 16px;
+    }

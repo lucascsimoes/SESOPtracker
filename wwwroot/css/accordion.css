@@ -1,0 +1,40 @@
+﻿.accordion {
+    width: 100%;
+}
+
+    .accordion > .accordion-item {
+        background: transparent;
+        border: none;
+    }
+
+        .accordion > .accordion-item > .accordion-header {
+            margin-bottom: 20px;
+        }
+
+            .accordion > .accordion-item > .accordion-header > button {
+                background: transparent;
+                color: var(--text);
+                border: 1px solid var(--input-border);
+                border-radius: 5px !important;
+                box-shadow: none;
+                z-index: 0;
+            }
+
+                .accordion > .accordion-item > .accordion-header > button::after {
+                    filter: invert(100%) saturate(0%);
+                    margin-left: 0;
+                    margin-left: 20px;
+                }
+
+                .accordion > .accordion-item > .accordion-header > button:hover {
+                    filter: brightness(130%);
+                }
+
+                .accordion > .accordion-item > .accordion-header > button:focus {
+                    box-shadow: none;
+                    outline: none;
+                }
+
+            .accordion > .accordion-item > .accordion-collapse {
+            
+            }

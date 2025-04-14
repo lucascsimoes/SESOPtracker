@@ -1,0 +1,297 @@
+﻿@model IEnumerable<SESOPtracker.Models.Entities.Equipamento>
+
+<div class="modal fade" id="equipmentListModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <header class="modal-header">
+                <div class="searchbar">
+                    <fieldset>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                        </svg>
+                        <input placeholder="Pesquise por um equipamento" />
+                    </fieldset>
+                </div>
+            </header>
+
+            <div class="modal-body">
+                <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" class="checkAll" id="checkAllEquipmentList" hidden />
+                            <label for="checkAllEquipmentList"></label>
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.patrimonio)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.item)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.nome)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.subCategoria)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.categoria)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.setor)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Sala)
+                        </th>
+                        <th style="display: none"></th>
+                        <th style="display: none"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                        <tr style="border-left: 3px solid @Html.DisplayFor(modelItem => item.Situacao.cor)">
+                            <td>
+                                <input type="checkbox" id="@item.patrimonio" hidden/>
+                                <label for="@item.patrimonio"></label>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.patrimonio)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.item)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.nome)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.subCategoria)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.categoria)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.setor)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sala.local)
+                            </td>
+                            <td style="display: none">
+                                @Html.DisplayFor(modelItem => item.Situacao.descricao)
+                            </td>
+                            <td style="display: none">
+                                @Html.DisplayFor(modelItem => item.dataCriacao)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            </div>
+
+            <footer class="modal-footer">
+                <p> 0 equipamentos selecionados </p>
+                <button class="btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn-default" data-bs-target="#equipmentListModal2" data-bs-toggle="modal" disabled> Avançar </button>
+            </footer>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="equipmentListModal2" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        <header class="modal-header">
+            <button class="btn-ghost" data-bs-target="#equipmentListModal" data-bs-toggle="modal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg>
+            </button>
+        </header>
+
+        <h2> Informe quais informações deseja exportar </h2>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="clickableContainer">
+                    <input type="checkbox" id="patrimonio" name="patrimonio" checked hidden />
+                    <label for="patrimonio"></label>
+                    <span> Patrimônio </span>
+                </div>
+                <div class="clickableContainer">
+                    <input type="checkbox" id="item" name="item" checked hidden />
+                    <label for="item"></label>
+                    <span> Item </span>
+                </div>
+                <div class="clickableContainer">
+                    <input type="checkbox" id="nome" name="nome" checked hidden />
+                    <label for="nome"></label>
+                    <span> Nome </span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="clickableContainer">
+                    <input type="checkbox" id="setor" name="setor" checked hidden />
+                    <label for="setor"></label>
+                    <span> Setor </span>
+                </div>
+                <div class="clickableContainer">
+                    <input type="checkbox" id="subCategoria" name="subCategoria" checked hidden />
+                    <label for="subCategoria"></label>
+                    <span> Subcategoria </span>
+                </div>
+                <div class="clickableContainer">
+                    <input type="checkbox" id="categoria" name="categoria" checked hidden />
+                    <label for="categoria"></label>
+                    <span> Categoria </span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="clickableContainer">
+                    <input type="checkbox" id="situacao" name="situacao" checked hidden />
+                    <label for="situacao"></label>
+                    <span> Situação </span>
+                </div>
+                <div class="clickableContainer">
+                    <input type="checkbox" id="sala" name="sala" checked hidden />
+                    <label for="sala"></label>
+                    <span> Sala </span>
+                </div>
+                <div class="clickableContainer">
+                    <input type="checkbox" id="dataCriacao" name="dataCriacao" checked hidden />
+                    <label for="dataCriacao"></label>
+                    <span> Data de criação </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="export">
+            <label for="export-select"> Exportar como </label>
+            <fieldset>
+                <select id="export-select">
+                    <option value="Excel" selected> Excel </option>
+                    <option value="CSV" disabled> CSV </option>
+                </select>
+            </fieldset>
+        </div>
+
+        <footer class="modal-footer">
+            <button class="btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button class="submitRelatorio btn-default" data-bs-dismiss="modal"> Fazer download </button>
+        </footer>
+    </div>
+    </div>
+</div>
+
+<script type="module" src="/js/check-all.js"></script>
+<script type="module" src="/js/search.js"></script>
+<script type="module">
+    import { countRows } from "/js/check-all.js"
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const checkboxes = document.querySelectorAll("table tbody input[type=checkbox]")
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", () => countRows())
+        })
+
+        // alterar o estado da checkbox para filtrar as colunas
+        const container = document.getElementsByClassName("clickableContainer")
+        Array.from(container).forEach(item => {
+            item.addEventListener("click", () => {
+                const checkbox = item.querySelector("input")
+                checkbox.checked = checkbox.checked ? false : true
+            })
+        })
+
+        function getDados(columns) {
+            const rows = document.querySelectorAll("table tbody tr:has(input:checked)")
+            const values = Array.from(rows).map(row => {
+                const dataRow = columns.map(column => {
+                    switch (column) {
+                        case "patrimonio":
+                            return row.querySelector(`td:nth-child(2)`).innerText.trim()
+                            break;
+                        case "item":
+                            return row.querySelector(`td:nth-child(3)`).innerText.trim()
+                            break;
+                        case "nome":
+                            return row.querySelector(`td:nth-child(4)`).innerText.trim()
+                            break;
+                        case "subCategoria":
+                            return row.querySelector(`td:nth-child(5)`).innerText.trim()
+                            break;
+                        case "categoria":
+                            return row.querySelector(`td:nth-child(6)`).innerText.trim()
+                            break;
+                        case "setor":
+                            return row.querySelector(`td:nth-child(7)`).innerText.trim()
+                            break;
+                        case "sala":
+                            return row.querySelector(`td:nth-child(8)`).innerText.trim()
+                            break;
+                        case "situacao":
+                            return row.querySelector(`td:nth-child(9)`).innerText.trim()
+                            break;
+                        case "dataCriacao":
+                            return row.querySelector(`td:nth-child(10)`).innerText.trim()
+                            break;
+                    }
+                })
+                
+                return Object.fromEntries(
+                    columns.map((key, index) => [key, dataRow[index]])
+                )
+            })
+
+            return values
+        }
+
+        const downloadBtn = document.getElementsByClassName("submitRelatorio")[0]
+        let format = document.getElementById("export-select")
+        let formatValue = "Excel"
+
+        format.addEventListener("change", () => formatValue = format.value)
+        downloadBtn.addEventListener("click", () => {
+            const columns = Array.from(document.querySelectorAll(".clickableContainer input:checked")).map(item => {
+                return item.getAttribute("name")
+            })
+
+            const data = getDados(columns)
+            checkForSubmit(formatValue, data)
+        })
+
+        
+
+        function checkForSubmit(type, dados) {
+            const url = type === "Excel" ? '@Url.Action("ExportToExcel", "Relatorios")' : '@Url.Action("ExportToCsv", "Relatorios")';
+            const contentType = type === "Excel" ? 'application/json' : 'application/json';
+            const fileType = type === "Excel" ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'text/csv';
+            const fileName = type === "Excel" ? 'equipamentos.xlsx' : 'equipamentos.csv';
+
+            if (type == "Excel") {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    contentType: contentType,
+                    data: JSON.stringify(dados),
+                    success: function(data) {
+                        var blob = new Blob([data], { type: fileType });
+                        var url = window.URL.createObjectURL(blob);
+                        var a = document.createElement('a');
+                        a.href = url;
+                        a.download = fileName;
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Erro na exportação:', error);
+                        alert('Ocorreu um erro ao exportar os dados.');
+                    },
+                    xhrFields: {
+                        responseType: 'blob'
+                    }
+                });
+            }
+        }
+
+    })
+</script>

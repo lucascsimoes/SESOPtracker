@@ -1,0 +1,46 @@
+﻿main#container > header {
+    position: fixed;
+    top: 0;
+    right: 33px;
+    background: linear-gradient(to bottom, var(--background) 80%, transparent);
+    width: calc(100% - 130px - 33px);
+    padding-block: 20px;
+    z-index: 1;
+}
+
+    main#container > header > div {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        height: 60px;
+        background: var(--foreground);
+        padding-inline: 20px;
+        border-radius: 10px;
+    }
+
+        main#container > header > div > .btn-default {
+            margin-left: auto;
+        }
+
+main#container > section {
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(100% - 17px);
+    gap: 40px;
+    margin-block: 180px 20px;
+}
+
+    main#container > section > .quantity {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        text-align: center;
+    }
+
+        main#container > section > .quantity > div > h1 {
+            font-size: 54px;
+        }
+
+        main#container > section > .quantity > div > p {
+            font-size: 12px;
+        }

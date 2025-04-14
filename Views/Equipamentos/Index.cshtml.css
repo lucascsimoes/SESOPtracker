@@ -1,0 +1,80 @@
+﻿main#container > header {
+    position: fixed;
+    top: 0;
+    right: 33px;
+    background: linear-gradient(to bottom, var(--background) 80%, transparent);
+    width: calc(100% - 130px - 33px);
+    padding-block: 20px;
+    z-index: 1;
+}
+
+    main#container > header > div {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        height: 60px;
+        background: var(--foreground);
+        padding-inline: 20px;
+    }
+
+    main#container > header > .searchbar {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+        main#container > header > .searchbar > .btn-default {
+            margin-left: auto;
+        }
+
+    main#container > header > .filters {
+        display: flex;
+        gap: 15px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+        main#container > header > .filters > p {
+            opacity: .7;
+            font-size: 13px;
+            margin-right: 20px;
+        }
+
+        main#container > header > .filters > div {
+            flex: 1;
+            position: relative;
+        }
+
+            main#container > header > .filters > div > svg {
+                width: 16px;
+                position: absolute;
+                left: 15px;
+                bottom: 15px;
+                z-index: 1;
+            }
+
+            main#container > header > .filters > div select {
+                padding-left: 40px;
+            }
+
+main#container > section {
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(100% - 17px);
+    gap: 40px;
+    margin-block: 180px 20px;
+}
+
+    main#container > section h4 {
+        font-size: 17px;
+    }
+
+
+.accordion > .accordion-item > .accordion-header > button {
+    background: var(--background);
+}
+
+    .accordion > .accordion-item > .accordion-header .count-rows {
+        font-size: 13px;
+        margin-left: auto;
+        opacity: .7;
+    }

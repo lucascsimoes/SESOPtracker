@@ -1,0 +1,151 @@
+﻿@model SESOPtracker.Models.Entities.Equipamento
+
+@{
+    ViewData["Title"] = "Equipamentos";
+    var multiple = false;
+    if (TempData["Equipamento"] != null) {
+        var equipamento = TempData["Equipamento"] as Dictionary<string, string>;
+        if (equipamento != null) {
+            Model.subCategoria = equipamento["subCategoria"];
+            Model.categoria = equipamento["categoria"];
+            Model.setor = equipamento["setor"];
+            Model.situacao = int.Parse(equipamento["situacao"]);
+            Model.sala = int.Parse(equipamento["sala"]);
+            Model.dataCriacao = equipamento["dataCriacao"];
+            multiple = true;
+        }
+    }
+}
+
+<header>
+    <div>
+        <button>
+            <a asp-action="Index">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg>
+            </a>
+        </button>
+        <span> ADICIONAR </span>
+        <p> Criar um equipamento </p>
+    </div>
+</header>
+
+<section>
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="patrimonio" class="control-label"></label>
+                    <fieldset>
+                        <input asp-for="patrimonio" />
+                    </fieldset>
+                    <span asp-validation-for="patrimonio" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="item" class="control-label"></label>
+                    <fieldset>
+                        <input asp-for="item" />
+                    </fieldset>
+                    <span asp-validation-for="item" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="nome" class="control-label"></label>
+                    <fieldset>
+                        <input asp-for="nome" />
+                    </fieldset>
+                    <span asp-validation-for="nome" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="setor" class="control-label"></label>
+                    <fieldset>
+                        <input asp-for="setor" style="text-transform: uppercase";/>
+                    </fieldset>
+                    <span asp-validation-for="setor" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="subCategoria" class="control-label"></label>
+                    <fieldset>
+                        <input asp-for="subCategoria" />
+                    </fieldset>
+                    <span asp-validation-for="subCategoria" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="categoria" class="control-label"></label>
+                    <fieldset>
+                        <select>
+                            <option value="" disabled selected="@(Model.categoria == "")"> Selecione uma categoria </option>
+                            <option value="Informática" selected="@(Model.categoria == "Informática")"> Informática </option>
+                            <option value="Audiovisual" selected="@(Model.categoria == "Audiovisual")"> Audiovisual </option>
+                            <option value="Mobília" selected="@(Model.categoria == "Mobília")"> Mobília </option>
+                            <option value="Telefonia" selected="@(Model.categoria == "Telefonia")"> Telefonia </option>
+                        </select>
+                        <input asp-for="categoria" hidden/>
+                    </fieldset>
+                    <span asp-validation-for="categoria" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="situacao" class="control-label"></label>
+                    <fieldset>
+                        <select asp-for="situacao" class="situacao-select" asp-items="ViewBag.situacao"></select>
+                    </fieldset>
+                    <span asp-validation-for="situacao" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="sala" class="control-label"></label>
+                    <fieldset>
+                        <select asp-for="sala" class="situacao-select" asp-items="ViewBag.sala">
+                            <option value="" disabled selected> Selecione uma sala </option>
+                        </select>
+                    </fieldset>
+                    <span asp-validation-for="sala" class="text-danger"></span>
+                </div>
+            </div>
+        </div>  
+
+        <input asp-for="dataCriacao" value="@DateTime.Now.ToString("dd/MM/yyyy HH:mm")" hidden/>
+
+        <footer>
+            <div>
+                <div>
+                    <input type="checkbox" id="multiple" name="multiple" checked="@multiple" hidden/>
+                    <label for="multiple"></label>
+                    <span> Manter campos </span>
+                </div>
+
+                <input id="file" type="file" name="file" hidden />
+                <label class="btn-secondary" for="file"> Importar dados </label>
+            </div>
+
+            <button type="submit" class="btn-default">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                    <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
+                </svg>
+            </button>
+        </footer>
+
+    </form>
+    @* <form asp-action="Import" method="post" enctype="multipart/form-data"> *@
+        
+    @*     <button type="submit">Enviar</button> *@
+    @* </form> *@
+</section>
+
+<script src="/js/create-sala.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const fileInput = document.querySelector("input[type=file]")
+        fileInput.addEventListener("change", () => {
+            if (fileInput.files.length > 0) {
+                const nomeArquivo = fileInput.files[0].name;
+                document.querySelector('input[type=file] + label').textContent = nomeArquivo;
+            } else {
+                document.querySelector('input[type=file] + label').textContent = 'Importar dados';
+            }
+        })
+    })
+</script>
+

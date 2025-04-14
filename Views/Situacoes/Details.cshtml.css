@@ -1,0 +1,122 @@
+﻿main#container > header {
+    position: fixed;
+    top: 0;
+    right: 33px;
+    background: linear-gradient(to bottom, var(--background) 80%, transparent);
+    width: calc(100% - 130px - 33px);
+    padding-block: 20px;
+    z-index: 1;
+}
+
+    main#container > header > div {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        height: 60px;
+        background: var(--foreground);
+        padding-inline: 20px;
+        border-radius: 10px;
+    }
+
+        main#container > header > div > button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: transparent;
+            border: none;
+            transition: background .3s;
+        }
+
+            main#container > header > div > button:hover {
+                background: var(--foreground-hover);
+                transition: background .3s;
+            }
+
+            main#container > header > div > button svg {
+                color: var(--text);
+                width: 28px;
+                height: 28px;
+                padding: 6px;
+            }
+
+main#container > section {
+    margin: 0 auto 20px;
+    max-width: 100%;
+}
+
+    main#container > section > header {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+        main#container > section > header button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            background: var(--foreground);
+            border: none;
+            transition: background .3s;
+        }
+
+            main#container > section > header button:first-child {
+                width: 80px;
+            }
+
+            main#container > section > header button:hover {
+                background: var(--foreground-hover);
+                transition: background .3s;
+            }
+
+            main#container > section > header button svg {
+                color: var(--text);
+                width: 16px;
+            }
+
+    main#container > section > main {
+        background: var(--foreground);
+        border-radius: 10px;
+        padding: 60px 40px;
+    }
+
+        main#container > section > main > h1 {
+            display: flex;
+            align-items: center; 
+        }
+
+            main#container > section > main > h1 > span {
+                display: block;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                margin-right: 20px;
+            }
+
+        main#container > section > main > p {
+            font-size: 15px;
+        }
+
+            main#container > section > main > p > span {
+                display: inline-block;
+                font-size: 12px;
+                opacity: .7;
+                text-transform: uppercase;
+                max-width: 100%;
+                width: 50px;
+            }
+
+    main#container > section > h5 {
+        margin-block: 60px 20px;
+    }
+
+    main#container > section > .list {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }

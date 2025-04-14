@@ -1,0 +1,59 @@
+﻿:root {
+    --color: #000000;
+}
+
+#history > div {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    cursor: default;
+}
+
+#history > div:hover {
+    background: var(--foreground-hover);
+}
+
+    #history > div > aside {
+        position: relative;
+    }
+
+    #history > div > aside[data-color]::after {
+        content: '';
+        position: absolute;
+        width: 1px;
+        border: 1px solid var(--color);
+        height: calc(100% + 20px);
+        top: 0;
+        left: 5px;
+        transform: translateY(16px);
+    }
+
+    #history > div:last-child > aside[data-color]::after {
+        border: 1px dashed var(--color);
+    }
+
+        #history > div > aside > span {
+            position: relative;
+            display: block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            transform: translateY(6px);
+            z-index: 1;
+        }
+
+    #history > div > div > span {
+        font-size: 13px;
+        opacity: .7;
+    }
+
+    #history > div > div > span:last-child {
+        margin-left: 15px;
+    }
+
+    #history > p {
+        margin-top: 25px;
+        opacity: .7;
+        font-size: 13px;
+        margin-left: 5px;
+    }

@@ -1,0 +1,121 @@
+﻿.searchbar fieldset input {
+    padding-inline: 50px 10px;
+}
+
+fieldset {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    height: 43px;
+    background: var(--input);
+    border-radius: 3px;
+    position: relative;
+    border: 1px solid var(--input-border);
+}
+
+    fieldset > select {
+        position: relative;
+        -webkit-appearance: none;
+        cursor: pointer;
+        padding-right: 20px;
+        z-index: 1;
+    }
+
+fieldset:has(select)::after {
+    content: "⯆";
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: 0;
+    inset-block: 0;
+    margin-block: auto;
+    color: var(--text);
+    font-size: 9px;
+    height: 90%;
+    padding-inline: 5px;
+    background: var(--input);
+}
+
+    fieldset > input,
+    fieldset > select {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        padding-inline: 20px;
+        background: transparent !important;
+        border: none;
+        color: var(--text);
+        font-size: 14px;
+    }
+
+        fieldset > select + input {
+            position: absolute;
+            visibility: hidden;
+        }
+
+    fieldset > input:read-only {
+        opacity: .5;
+        cursor: default;
+        user-select: none;
+    }
+
+    fieldset > svg {
+        position: absolute;
+        left: 16px;
+    }
+
+        fieldset select option {
+            color: var(--text);
+            background: var(--foreground);
+        }
+
+    fieldset button:not(:read-only):focus,
+    fieldset select:not(:read-only):focus,
+    fieldset input:not(:read-only):focus {
+        outline: none !important;
+        box-shadow: none !important;
+        border-bottom: 2px solid var(--primary) !important;
+        margin-bottom: -2px !important;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+    }
+
+    fieldset button:read-only:focus,
+    fieldset select:read-only:focus,
+    fieldset input:read-only:focus {
+        box-shadow: none;
+        outline: none;
+    }
+
+    fieldset button:hover,
+    fieldset select:hover,
+    fieldset input:hover {
+        box-shadow: none;
+        outline: none;
+    }
+
+        fieldset .situacao-select option {
+            padding-left: 30px;
+        }
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+    transition: background-color 0s 1000000s, color 0s 1000000s !important;
+}
+
+label:has(+ fieldset > input[data-val-required]),
+label:has(+ fieldset > select[data-val-required]) {
+    position: relative;
+}
+
+label:has(+ fieldset > input[data-val-required])::after,
+label:has(+ fieldset > select[data-val-required])::after {
+    content: "*";
+    position: absolute;
+    inset-block: 0;
+    margin-block: auto;
+    color: var(--red);
+    transform: translateY(3px) translateX(4px);
+}

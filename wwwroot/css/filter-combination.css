@@ -1,0 +1,36 @@
+﻿.filterCombination {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .filterCombination fieldset:has(select) {
+        max-width: 160px;
+    }
+
+.andOr {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-block: 10px;
+}
+
+    .andOr fieldset {
+        background: none;
+        max-width: 70px;
+    }
+
+        .andOr fieldset::after {
+            background: var(--foreground);
+        }
+
+        .andOr fieldset select {
+            border: none;
+        }
+
+.filterCombination .btn-ghost,
+.andOr .btn-ghost {
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+}

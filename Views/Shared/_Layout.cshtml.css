@@ -1,0 +1,76 @@
+﻿#menu {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    width: 130px;
+    height: 100dvh;
+    padding: 20px 30px;
+}
+
+    #menu > div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-block: 20px;
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        background: var(--foreground);
+    }
+
+        #menu > div > hr {
+            width: 32px;
+            margin-block: 20px;
+        }
+
+        #menu > div > button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            margin-bottom: 6px;
+            transition: background .3s;
+        }
+
+        #menu > div > button:hover {
+            background: var(--foreground-hover);
+            transition: background .3s;
+        }
+
+        #menu > div > button.current {
+            position: relative;
+            background: var(--foreground-hover);
+        }
+
+        #menu > div > button.current::after {
+            content: "";
+            position: absolute;
+            width: 5px;
+            height: 60%;
+            left: -10px;
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+            background: var(--primary);
+        }
+
+            #menu svg {
+                width: 48px;
+                height: 48px;
+                padding: 12px;
+                color: white;
+            }
+
+main#container {
+    position: relative;
+    left: 130px;
+    width: calc(100vw - 130px);
+    min-height: 100dvh;
+    padding: 20px 30px;
+    padding-left: 0;
+}

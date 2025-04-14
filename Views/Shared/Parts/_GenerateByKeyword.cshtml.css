@@ -1,0 +1,11 @@
+﻿.modal-body > h2 {
+    margin-bottom: 60px;
+}
+
+.andOr fieldset {
+    background: var(--foreground) !important;
+}
+
+.alert {
+    margin-bottom: 20px;
+}

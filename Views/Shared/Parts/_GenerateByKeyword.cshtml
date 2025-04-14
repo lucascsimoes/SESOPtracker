@@ -1,0 +1,246 @@
+﻿@using System.Text.Json
+@using System.Text.Json.Serialization
+@model IEnumerable<SESOPtracker.Models.Entities.Equipamento>
+
+<div class="modal fade" id="keywordModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="alert alert-danger" hidden>
+                    Nenhum equipamento encontrado com as informações desejadas
+                </div>
+
+                <h2> Informe qual combinação deseja usar </h2>
+            </div>
+            <footer class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn-default"> Fazer download </button>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function getCombinationValue(combination) {
+        const column = combination.querySelector("fieldset:nth-child(1) select").value
+        const param = combination.querySelector("fieldset:nth-child(2) select").value
+        const value = combination.querySelector("fieldset:nth-child(3) input").value
+        return `${ column };${ param };${ value }`
+    }
+
+    function getAndOrValue(andOr) {
+        const value = andOr.querySelector("fieldset select").value
+        return value
+    }
+</script>
+<script>
+    async function fetchEquipamentos() {
+        try {
+            const response = await fetch('/Relatorios/GetEquipamentos');
+            if (!response.ok) {
+                throw new Error('Erro ao buscar equipamentos');
+            }
+            const equipamentos = await response.json();
+            return equipamentos;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    fetchEquipamentos().then(data => {
+        window.equipamentos = data;
+    });
+
+    function generateFilterCombination() {
+        let html = `
+            <div class="filterCombination">
+                <fieldset>
+                    <select>
+                        <option value="patrimonio" selected> Patrimônio </option>
+                        <option value="item"> Item </option>
+                        <option value="nome"> Nome </option>
+                        <option value="setor"> Setor </option>
+                        <option value="subCategoria"> Subcategoria </option>
+                        <option value="categoria"> Categoria </option>
+                        <option value="situacao"> Situação </option>
+                        <option value="sala"> Sala </option>
+                    </select>
+                </fieldset>
+                <fieldset>
+                    <select>
+                        <option value="contem" selected> contém </option>
+                        <option value="igual"> é igual a </option>
+                        <option value="diferente"> é diferente de </option>
+                    </select>
+                </fieldset>
+                <fieldset>
+                    <input type="text"/>
+                </fieldset>
+                <button class="btn-ghost">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+                    </svg>
+                </button>
+            </div>
+        `
+
+        $("#keywordModal .modal-body").append(html)
+    }
+
+    function generateAndOr() {
+        let html = `
+            <div class="andOr">
+                <fieldset>
+                    <select>
+                        <option value="e"> E </option>
+                        <option value="ou"> OU </option>
+                    </select>
+                </fieldset>
+                <button class="btn-ghost">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-lg" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8"/>
+                    </svg>
+                </button>
+            </div>
+        `
+
+        $("#keywordModal .modal-body").append(html)
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        generateFilterCombination();
+
+        document.querySelector("#keywordModal .modal-body").addEventListener("click", (event) => {
+            if (event.target.closest(".btn-ghost")) {
+                const button = event.target.closest(".btn-ghost");
+
+                if (button.parentElement.classList.contains("filterCombination")) {
+                    generateAndOr();
+                    generateFilterCombination();
+                } else if (button.parentElement.classList.contains("andOr")) {
+                    button.closest(".andOr").nextElementSibling?.remove();
+                    button.closest(".andOr").remove();
+                }
+            }
+        });
+
+        document.querySelector("#keywordModal .btn-default").addEventListener("click", () => {
+            const allFilterCombination = document.querySelectorAll("#keywordModal .filterCombination")
+            let values = Array.from(allFilterCombination).map(item => {
+                if (item.nextElementSibling == null) {
+                    return [getCombinationValue(item)]
+                }
+
+                return [
+                    getCombinationValue(item),
+                    getAndOrValue(item.nextElementSibling)
+                ]
+            })
+
+            values = values.flat()
+            generateConditions(values)
+        })
+    });
+
+    function generateConditions(values) {
+        console.log(values)
+        let filteredEquipamentos = [...equipamentos];
+
+        for (let i = 0; i < values.length; i++) {
+            const condition = values[i];
+
+            if (condition === "e" || condition === "ou") {
+                const nextCondition = values[i + 1];
+                if (!nextCondition) break;
+
+                const [column, type, value] = nextCondition.split(";");
+
+                if (condition === "e") {
+                    filteredEquipamentos = filteredEquipamentos.filter(equipamento =>
+                        getData(column, type, value).includes(equipamento)
+                    );
+                } else if (condition === "ou") {
+                    const orFiltered = getData(column, type, value);
+                    filteredEquipamentos = [...new Set([...filteredEquipamentos, ...orFiltered])];
+                }
+
+                i++
+            } else {
+                const [column, type, value] = condition.split(";");
+                filteredEquipamentos = getData(column, type, value);
+            }
+        }
+
+        checkForSubmit("Excel", filteredEquipamentos);
+    }
+
+    function getData(column, type, value) {
+        if (type == "contem") {
+            const filtered = equipamentos.filter(equipamento => {
+                return equipamento[column]?.toString().toLowerCase().includes(value.toLowerCase());
+            })
+
+            return filtered
+        }
+
+        if (type == "igual") {
+            const filtered = equipamentos.filter(equipamento => {
+                return equipamento[column]?.toString().toLowerCase() == value.toLowerCase();
+            })
+
+            return filtered
+        }
+
+        if (type == "diferente") {
+            const filtered = equipamentos.filter(equipamento => {
+                return equipamento[column]?.toString().toLowerCase() != value.toLowerCase();
+            })
+
+            return filtered
+        }
+
+        return []
+    }
+
+    function checkForSubmit(type, dados) {
+        const url = type === "Excel" ? '@Url.Action("ExportToExcel", "Relatorios")' : '@Url.Action("ExportToCsv", "Relatorios")';
+        const contentType = type === "Excel" ? 'application/json' : 'application/json';
+        const fileType = type === "Excel" ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'text/csv';
+        const fileName = type === "Excel" ? 'equipamentos.xlsx' : 'equipamentos.csv';
+
+        if (dados.length == 0) {
+            document.querySelector("#keywordModal .alert").removeAttribute("hidden")
+            return;
+        } else {
+            document.querySelector("#keywordModal .alert").setAttribute("hidden", "hidden")
+        }
+
+        if (type == "Excel") {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                contentType: contentType,
+                data: JSON.stringify(dados),
+                success: function(data) {
+                    var blob = new Blob([data], { type: fileType });
+                    var url = window.URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Erro na exportação:', error);
+                    alert('Ocorreu um erro ao exportar os dados.');
+                },
+                xhrFields: {
+                    responseType: 'blob'
+                }
+            });
+        }
+    }
+</script>

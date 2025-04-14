@@ -1,0 +1,49 @@
+﻿table > thead > tr {
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+    table th {
+        background: transparent !important;
+        color: var(--text) !important;
+        font-weight: normal !important;
+        padding: 0 30px !important;
+        border: none;
+        border-left: 1px solid var(--input-border);
+        font-size: 13px;
+    }
+
+
+
+table > tbody::before {
+    line-height: 8px;
+    content: '.';
+    color: var(--background);
+    display: block;
+}
+
+    table > tbody > tr {
+        background: var(--background);
+        cursor: pointer;
+    }
+
+        table > tbody > tr:hover {
+            filter: brightness(130%);
+        }
+
+
+        table > tbody > tr:nth-child(2n+1) {
+            background: var(--table-row);
+        }
+
+        table > tbody > tr > td {
+            background: transparent !important;
+            padding: 20px 30px !important;
+            border: none;
+            color: var(--text) !important;
+        }
+
+            table > tbody > tr > td > span {
+                display: inline-block;
+                margin-right: 10px;
+            }

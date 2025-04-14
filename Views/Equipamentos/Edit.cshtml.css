@@ -1,0 +1,81 @@
+﻿main#container > header {
+    position: fixed;
+    top: 0;
+    right: 33px;
+    background: linear-gradient(to bottom, var(--background) 80%, transparent);
+    width: calc(100% - 130px - 33px);
+    padding-block: 20px;
+    z-index: 1;
+}
+
+    main#container > header > div {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        height: 60px;
+        background: var(--foreground);
+        padding-inline: 20px;
+        border-radius: 10px;
+    }
+
+        main#container > header > div > button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: transparent;
+            border: none;
+            transition: background .3s;
+        }
+
+            main#container > header > div > button:hover {
+                background: var(--foreground-hover);
+                transition: background .3s;
+            }
+
+            main#container > header > div > button svg {
+                color: var(--text);
+                width: 28px;
+                height: 28px;
+                padding: 6px;
+            }
+
+        main#container > header > div > span {
+            text-transform: uppercase;
+            color: var(--primary);
+            font-size: 12px;
+            border-inline: 1px solid var(--foreground-hover);
+            padding-inline: 15px;
+        }
+
+main#container > section {
+    margin: 90px auto 20px;
+    max-width: 100%;
+    width: 800px;
+}
+
+main#container form .form-group {
+    flex-direction: column;
+    flex: 1;
+    margin-block: 20px;
+}
+
+main#container form .modal-body > p {
+    margin-block: 20px 40px;
+}
+
+main#container form button[type=submit],
+main#container form button[data-bs-target] {
+    width: 60px;
+    height: 80px;
+    margin-left: auto;
+    margin-top: 20px;
+}
+
+    main#container form button[type=submit] svg,
+    main#container form button[data-bs-target] svg {
+        width: 20px;
+        height: 20px;
+    }

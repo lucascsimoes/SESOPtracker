@@ -1,0 +1,89 @@
+﻿.btn-default {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: fit-content;
+    height: 43px;
+    color: black;
+    border: none;
+    background: var(--primary);
+    border-radius: 5px;
+    padding-inline: 20px;
+    transition: background .3s;
+}
+
+.btn-default:not([disabled]):hover {
+    color: black;
+    background: var(--primary-600);
+    transition: background .3s;
+}
+
+.btn-secondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: fit-content;
+    height: 43px;
+    color: black;
+    border: none;
+    background: var(--input);
+    border-radius: 5px;
+    padding-inline: 20px;
+    transition: background .3s;
+    color: var(--text);
+}
+
+.btn-secondary:not([disabled]):hover {
+    background: var(--input-border);
+    transition: background .3s;
+}
+
+.btn-default,
+.btn-default *,
+.btn-secondary,
+.btn-secondary * {
+    font-size: 13px;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+    .btn-default > svg,
+    .btn-secondary > svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    .btn-secondary > svg {
+        color: var(--text); 
+    }
+
+.btn-default[disabled],
+.btn-secondary[disabled] {
+    cursor: default;
+    filter: brightness(60%);
+}
+
+
+.btn-ghost {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    transition: background .3s;
+}
+
+    .btn-ghost:hover {
+        background: var(--foreground-hover);
+        transition: background .3s;
+    }
+
+    .btn-ghost svg {
+        color: var(--text);
+        width: 28px;
+        height: 28px;
+        padding: 6px;
+    }

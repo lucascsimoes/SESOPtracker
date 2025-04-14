@@ -1,0 +1,26 @@
+﻿.modal-footer > p {
+    margin-right: auto;
+}
+
+.modal .clickableContainer {
+    padding: 15px;
+    padding-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--input-border);
+    margin-block: 10px;
+    cursor: pointer;
+    transition: background .3s;
+}
+
+    .modal .clickableContainer:hover {
+        background: var(--input);
+        transition: background .3s;
+    }
+
+.modal-content .export {
+    margin-block: 0 40px;
+}
+
+    .modal-content .export label {
+        font-size: 14px;
+    }

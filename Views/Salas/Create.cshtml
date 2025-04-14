@@ -1,0 +1,57 @@
+﻿@model SESOPtracker.Models.Entities.Sala
+
+@{
+    ViewData["Title"] = "Salas";
+}
+
+<header>
+    <div>
+        <button>
+            <a asp-action="Index">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg>
+            </a>
+        </button>
+        <span> ADICIONAR </span>
+        <p> Criar uma sala </p>
+    </div>
+</header>
+
+<section>
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="local" class="control-label"></label>
+            <fieldset>
+                <input asp-for="local" style="text-transform: uppercase;"/>
+            </fieldset>
+            <span asp-validation-for="local" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="descricao" class="control-label"></label>
+            <fieldset>
+                <select>
+                    <option value="" selected disabled> Selecione uma descrição </option>
+                    <option value="Sala de aula"> Sala de aula </option>
+                    <option value="Laboratório"> Laboratório </option>
+                    <option value="Administrativo"> Administrativo </option>
+                    <option value="Copa"> Copa </option>
+                    <option value="Conselho Consultivo"> Conselho Consultivo </option>
+                </select>
+                <input asp-for="descricao" style="visibility: hidden;"/>
+            </fieldset>
+            <span asp-validation-for="descricao" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn-default">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
+            </svg>
+        </button>
+    </form>
+</section>
+
+
+<script src="/js/create-sala.js"></script>
+
