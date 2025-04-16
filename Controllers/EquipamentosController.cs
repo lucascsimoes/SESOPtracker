@@ -29,14 +29,14 @@ namespace SESOPtracker.Controllers
         }
 
         // GET: Equipamentos
-        public async Task<IActionResult> Index(string viewBy, string orderBy) {
+        public async Task<IActionResult> Index(string viewBy) {
             if (viewBy != null) {
                 viewBy = viewBy.Split("?")[0];
-                orderBy = viewBy.Split("orderBy=")[0];
             }
 
-            var equipamentos = from e in _context.Equipamentos.Include(e => e.Sala).Include(e => e.Situacao)
-                               select e;
+
+           var equipamentos = from e in _context.Equipamentos.Include(e => e.Sala).Include(e => e.Situacao).Include(e => e.Historico)
+                                   select e;
 
             var equipamentosList = await equipamentos.ToListAsync();
 
@@ -54,21 +54,14 @@ namespace SESOPtracker.Controllers
                     equipamentosList = equipamentosList.OrderBy(e => e.setor).ToList();
                     break;
                 default:
-                    if (orderBy == "asc") {
-                        equipamentosList = equipamentosList.OrderBy(e => {
-                            if (long.TryParse(e.patrimonio, out long patrimonioNum)) {
-                                return patrimonioNum;
-                            }
-                            return long.MaxValue;
-                        }).ToList();
-                    } else {
-                        equipamentosList = equipamentosList.OrderByDescending(e => {
-                    if (long.TryParse(e.patrimonio, out long patrimonioNum)) {
-                        return patrimonioNum;
-                    }
-                    return long.MinValue;
-                }).ToList();
-                    }
+                    equipamentosList = equipamentosList.OrderByDescending(e =>
+                    {
+                        if (long.TryParse(e.patrimonio, out long patrimonioNum))
+                        {
+                            return patrimonioNum;
+                        }
+                        return long.MinValue;
+                    }).ToList();
                     break;
             }
 
@@ -85,7 +78,6 @@ namespace SESOPtracker.Controllers
             ViewData["EquipamentosPorSetor"] = equipamentosPorSetor;
 
             ViewData["ViewBy"] = viewBy;
-            ViewData["OrderBy"] = orderBy;
             return View(equipamentosList);
         }
 
@@ -239,19 +231,21 @@ namespace SESOPtracker.Controllers
             [FromForm] string dataAlteracao,
             [FromForm] string descricao,
             [FromForm] string observacao,
-            [FromForm] bool importante) {
+            [FromForm] string importante) {
 
             if (equipamento.setor != null) {
                 equipamento.setor = equipamento.setor.ToUpper();
             }
 
-            if (id != equipamento.patrimonio) {
+            if (id != equipamento.patrimonio)
+            {
                 return NotFound();
             }
 
             ModelState.Remove("sala");
             ModelState.Remove("situacao");
             ModelState.Remove("observacao");
+            ModelState.Remove("importante");
             ModelState.Remove("Historico");
 
             if (ModelState.IsValid) {
@@ -259,15 +253,13 @@ namespace SESOPtracker.Controllers
                     _context.Update(equipamento);
                     await _context.SaveChangesAsync();
 
-                    var teste = observacao;
-
                     var historico = new Historico {
                         patrimonio = equipamento.patrimonio,
                         dataAlteracao = dataAlteracao,
                         situacaoAtual = equipamento.situacao,
                         descricao = descricao,
                         observacao = observacao,
-                        importante = importante
+                        importante = importante == "on" ? true : false
                     };
 
                     _context.Historicos.Add(historico);

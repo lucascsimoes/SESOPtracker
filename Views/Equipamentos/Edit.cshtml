@@ -167,19 +167,11 @@
             let descricaoAlteracoes = []
 
             if (equipamentoOriginal.item != item) {
-                if (equipamentoOriginal.item == null) {
-                    descricaoAlteracoes.push(`Item alterado para '${item == null ? "nulo" : item}'`);
-                } else {
-                    descricaoAlteracoes.push(`Item alterado de '${equipamentoOriginal.item}' para '${item}'`);
-                }
+                descricaoAlteracoes.push(`Item alterado de '${equipamentoOriginal.item == null ? "VAZIO" : equipamentoOriginal.item}' para '${item == null ? "VAZIO" : item}'`);
             }
 
             if (equipamentoOriginal.nome != nome) {
-                if (equipamentoOriginal.nome == null) {
-                    descricaoAlteracoes.push(`Nome alterado para '${nome == null ? "nulo" : nome}'`);
-                } else {
-                    descricaoAlteracoes.push(`Nome alterado de '${equipamentoOriginal.nome}' para '${nome}'`);
-                }
+                descricaoAlteracoes.push(`Nome alterado de '${equipamentoOriginal.nome == null ? "VAZIO" : equipamentoOriginal.nome}' para '${nome == null ? "VAZIO" : nome}'`);
             }
 
             if (equipamentoOriginal.subCategoria != subcategoria) {
@@ -191,11 +183,7 @@
             }
 
             if (equipamentoOriginal.setor != setor) {
-                if (equipamentoOriginal.setor == null) {
-                    descricaoAlteracoes.push(`Setor alterado para '${setor == null ? "nulo" : setor}'`);
-                } else {
-                    descricaoAlteracoes.push(`Setor alterado de '${equipamentoOriginal.setor}' para '${setor}'`);
-                }
+                descricaoAlteracoes.push(`Setor alterado de '${equipamentoOriginal.setor == null ? "VAZIO" : equipamentoOriginal.setor}' para '${setor == null ? "VAZIO" : setor}'`);
             }
 
             if (equipamentoOriginal.situacao != situacao) {

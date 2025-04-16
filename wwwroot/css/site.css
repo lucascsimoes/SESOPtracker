@@ -1,7 +1,11 @@
 :root {
+    color-scheme: light dark;
+}
+
+[data-bs-theme="dark"] {
     --background: #121214;
     --foreground: #202024;
-    --foreground-hover: #353535;
+    --foreground-hover: #2c2c30;
     --text: #e1e1e6;
     --primary-700: #73A917;
     --primary-600: #A3DE40;
@@ -12,6 +16,29 @@
     --input-border: #424242;
     --table-row: #161618;
     --red: #d9534f;
+    --yellow: #f0ad4c;
+}
+
+[data-bs-theme="light"] {
+    --background: #f8f9fa;
+    --foreground: #ffffff;
+    --foreground-hover: #f0f0f0;
+    --text: #333333;
+    --primary-700: #5a8f12;
+    --primary-600: #8bb82f;
+    --primary: #a0d64c;
+    --primary-400: #b8e07d;
+    --primary-300: #d4edb4;
+    --input: #f0f0f0;
+    --input-border: #d1d1d1;
+    --table-row: #f9f9f9;
+    --red: #d9534f;
+    --yellow: #f0ad4c;
+}
+
+@font-face {
+    font-family: "geomanist-book";
+    src: url("/assets/fonts/geomanist-book.woff2") format("woff2"), url("/assets/fonts/geomanist-book.woff") format("woff");
 }
 
 * {
@@ -21,6 +48,7 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     text-decoration: none;
+    font-family: "geomanist-book";
 }
 
 h1, h2, h3, h4, h5, h6, p {
@@ -43,4 +71,14 @@ body {
 .alert-danger {
     background: #d9534f !important;
     border: none;
+}
+
+.dropdown-menu-dark {
+    background: var(--foreground);
+    border: 1px solid var(--foreground-hover);
+}
+
+.hl-vertical {
+    width: 30px;
+    transform: rotate(90deg);
 }

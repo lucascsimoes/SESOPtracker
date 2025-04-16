@@ -1,0 +1,46 @@
+﻿.equipmentActions {
+    display: flex;
+    gap: 15px;
+    margin-left: auto;
+}
+
+    .equipmentActions > button {
+        width: fit-content;
+        white-space: nowrap;
+        transition: filter .3s;
+    }
+
+        .equipmentActions > button:hover {
+            filter: brightness(85%);
+            transition: filter .3s;
+        }
+
+        .equipmentActions > button:not([data-bs-toggle]) {
+            background: var(--yellow);
+        }
+
+        .equipmentActions > button[data-bs-toggle] {
+            background: var(--red);
+        }
+
+#addTag {
+    background: var(--input);
+    border: 1px solid var(--input-border);
+    font-size: 13px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+    #addTag > div {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    #addTag svg {
+        width: 14px;
+        height: 14px;
+    }

@@ -15,31 +15,20 @@
 
     // ATRIBUIR COR A LINHA DO HISTÓRICO
 
-    var asides = document.querySelectorAll("aside[data-color]");
-    asides.forEach(function (aside) {
-        var color = aside.getAttribute("data-color");
-        aside.style.setProperty("--color", color);
+    var elementColored = document.querySelectorAll("[data-color]");
+    elementColored.forEach(function (element) {
+        var color = element.getAttribute("data-color");
+        element.style.setProperty("--color", color);
     });
 
-    // DELETE MODAL
-
-    //var modal = document.getElementById("modal");
-    //var btn = document.getElementById("openModal");
-    //var cancelButton = document.getElementById("closeModal");
-
-    //if (btn != null) {
-    //    btn.onclick = function () {
-    //        modal.style.display = "flex";
-    //    }
-
-    //    cancelButton.onclick = function () {
-    //        modal.style.display = "none";
-    //    }
-
-    //    window.onclick = function (event) {
-    //        if (event.target == modal) {
-    //            modal.style.display = "none";
-    //        }
-    //    }
-    //}
+    const themeBtn = document.getElementById("changeTheme")
+    themeBtn.addEventListener("click", () => {
+        const theme = document.querySelector("html").getAttribute("data-bs-theme")
+        if (theme == "light") {
+            document.querySelector("html").setAttribute("data-bs-theme", "dark")
+        } else {
+            document.querySelector("html").setAttribute("data-bs-theme", "light")
+        }
+        
+    })
 });

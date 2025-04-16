@@ -1,22 +1,40 @@
-﻿table > thead > tr {
-    border-radius: 8px;
-    margin-bottom: 5px;
+﻿table {
+    padding: 5px;
 }
 
-    table th {
-        background: transparent !important;
-        color: var(--text) !important;
-        font-weight: normal !important;
-        padding: 0 30px !important;
-        border: none;
-        border-left: 1px solid var(--input-border);
-        font-size: 13px;
+    table > thead > tr {
+        position: sticky;
+        top: 65px;
+        z-index: 2;
+        height: 40px;
+        vertical-align: middle;
+        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    }
+
+table th {
+    padding-block: 40px;
+    background: var(--foreground-hover) !important;
+    color: var(--text) !important;
+    font-weight: normal !important;
+    padding: 0 30px !important;
+    border: none;
+    font-size: 13px;
+}
+
+    table th:first-child {
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+    }
+
+    table th:last-child {
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
     }
 
 
 
 table > tbody::before {
-    line-height: 8px;
+    line-height: 10px;
     content: '.';
     color: var(--background);
     display: block;

@@ -17,31 +17,36 @@
     })
 }
 
+export function checkMatch(element, text) {
+    let matches = 0
+    element.querySelectorAll("td").forEach((value) => {
+        if (value.innerText.toLowerCase().trim().includes(text.toLowerCase().trim()) && window.getComputedStyle(element).display != "none") {
+            matches++
+        }
+    })
+
+    if (matches > 0) {
+        element.style.display = "table-row"
+    } else {
+        element.style.display = "none"
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     const input = document.querySelector(".searchbar fieldset input")
-    const tableRows = document.querySelectorAll("table tbody tr")
+    const tableRows = document.querySelectorAll("#container section table tbody tr")
 
-    input.onkeyup = () => {
-        tableRows.forEach((element) => {
-            let matches = 0
-            element.querySelectorAll("td").forEach((value) => {
-                if (value.innerText.toLowerCase().trim().includes(input.value.toLowerCase().trim())) {
-                    matches++
-                }
-            })
+    if (input != null) {
+        input.onkeyup = () => {
+            tableRows.forEach((element) => checkMatch(element, input.value))
 
-            if (matches > 0) {
-                element.style.display = "table-row"
-            } else {
-                element.style.display = "none"
+            const quantity = Array.from(tableRows).filter(item => window.getComputedStyle(item).display == "table-row").length
+
+            if (document.getElementById("quantityResult") != null) {
+                document.getElementById("quantityResult").innerHTML = quantity
             }
 
-        })
-
-        const quantity = Array.from(tableRows).filter(item => window.getComputedStyle(item).display == "table-row").length
-        if (document.getElementById("equipmentQuantity") != null) {
-            document.getElementById("equipmentQuantity").innerHTML = `Há ${ quantity } equipamentos listados`
+            countRows()
         }
-        countRows()
     }
 })
