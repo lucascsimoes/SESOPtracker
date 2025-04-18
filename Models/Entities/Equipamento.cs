@@ -37,6 +37,9 @@ namespace SESOPtracker.Models.Entities {
         [Required(ErrorMessage = "A sala é obrigatória")]
         public int sala { get; set; }
 
+        [Display(Name = "Tag")]
+        public string? tag { get; set; }
+
 
 
 

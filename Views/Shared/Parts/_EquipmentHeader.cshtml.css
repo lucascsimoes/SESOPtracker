@@ -11,18 +11,6 @@
         color: hsl(var(--foreground));
     }
 
-        .equipmentActions > button:not([data-bs-toggle]) {
-            background: hsl(var(--background));
-            border: 1px solid hsl(var(--border));
-            transition: background .3s;
-        }
-
-            .equipmentActions > button:not([data-bs-toggle]):hover {
-                background: hsl(var(--accent));
-                color: hsl(var(--accent-foreground));
-                transition: background .3s;
-            }
-
         .equipmentActions > button[data-bs-toggle] {
             background: hsl(var(--destructive));
             color: white;
@@ -37,9 +25,14 @@
                     color: white;
                 }
 
-    .equipmentActions > button > svg * {
-        color: hsl(var(--foreground));
+    .equipmentActions > button > svg {
+        width: 17px;
+        height: 17px;
     }
+
+        .equipmentActions > button > svg * {
+            color: hsl(var(--foreground));
+        }
 
 #addTag {
     background: hsl(var(--background));
@@ -50,11 +43,6 @@
     transition: background .3s;
 }
 
-    #addTag:hover {
-        background: hsl(var(--accent));
-        transition: background .3s;
-    }
-
     #addTag > div {
         display: flex;
         align-items: center;
@@ -63,7 +51,27 @@
         user-select: none;
     }
 
+        #addTag > div:not(:has(svg)) {
+            padding: 5px 10px;
+            background: hsl(var(--chart-4));
+            border-radius: 5px;
+            color: hsl(var(--card));
+        }
+
+        #addTag > div:has(svg):hover {
+            background: hsl(var(--accent));
+            transition: background .3s;
+        }
+
     #addTag svg {
         width: 14px;
         height: 14px;
     }
+
+    #addTag fieldset {
+        height: 35px;
+    }
+
+        #addTag input {
+            padding-inline: 15px;
+        }

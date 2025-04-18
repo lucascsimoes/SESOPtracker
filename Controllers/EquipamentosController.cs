@@ -439,12 +439,6 @@ namespace SESOPtracker.Controllers
                 }
             }
 
-            //if (!ModelState.IsValid) {
-            //    ViewData["sala"] = new SelectList(_context.Salas, "salaId", "local");
-            //    ViewData["situacao"] = new SelectList(_context.Situacoes, "situacaoId", "descricao");
-            //    return View("Create");
-            //}
-
             _context.Equipamentos.AddRange(equipamentos);
             await _context.SaveChangesAsync();
 
@@ -452,6 +446,27 @@ namespace SESOPtracker.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult EditTag(string id, [FromBody] TagUpdateModel model) {
+            if (model == null || string.IsNullOrWhiteSpace(model.Tag)) {
+                return BadRequest("O valor da tag é inválido.");
+            }
+
+            var equipamento = _context.Equipamentos.FirstOrDefault(e => e.patrimonio == id);
+            if (equipamento == null) {
+                return NotFound("Equipamento não encontrado.");
+            }
+
+            equipamento.tag = model.Tag;
+            _context.SaveChanges();
+
+            return Ok("Tag atualizada com sucesso.");
+        }
+
+        public class TagUpdateModel {
+            public string? Tag { get; set; }
         }
     }
 }

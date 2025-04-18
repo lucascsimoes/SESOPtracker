@@ -28,16 +28,18 @@
     height: 43px;
     color: black;
     border: none;
-    background: hsl(var(--input));
+    background: hsl(var(--background));
+    border: 1px solid hsl(var(--border));
     border-radius: 5px;
     padding-inline: 20px;
     transition: background .3s;
 }
 
-.btn-secondary:not([disabled]):hover {
-    background: hsl(var(--border));
-    transition: background .3s;
-}
+    .btn-secondary:not([disabled]):hover {
+        background: hsl(var(--accent));
+        color: hsl(var(--accent-foreground));
+        transition: background .3s;
+    }
 
 .btn-default,
 .btn-default *,
@@ -61,9 +63,18 @@
     }
 
 .btn-default[disabled],
-.btn-secondary[disabled] {
-    cursor: default;
+.btn-secondary[disabled],
+.btn-default[disabled] *,
+.btn-secondary[disabled] * {
+    cursor: not-allowed;
     filter: brightness(60%);
+    pointer-events: none;
+}
+
+.btn-primary:has(> svg:only-child),
+.btn-secondary:has(> svg:only-child) {
+    padding: 0;
+    aspect-ratio: 1 / 1;
 }
 
 
