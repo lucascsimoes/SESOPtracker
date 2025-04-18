@@ -7,7 +7,8 @@
     display: flex;
     justify-content: space-between;
     padding: 25px 30px;
-    background: var(--foreground);
+    background: hsl(var(--background));
+    border: 1px solid hsl(var(--border));
     outline: 2px solid attr(data-color);
     outline-offset: 3px;
     border-radius: 3px;
@@ -24,7 +25,7 @@
         outline: 1px solid var(--color);
         outline-offset: 3px;
         border-radius: 3px;
-        opacity: .5;
+        opacity: .7;
     }
 
     #history > div::before {
@@ -36,17 +37,9 @@
         width: 2px;
         height: calc(60px - 8px);
         background: var(--color);
-        opacity: .5;
+        opacity: .7;
     }
 
-
-
-/*            #history > div > span[data-important="True"] {
-                box-shadow: 0px 0px 1px 1px #0000001a;
-                animation: pulse-animation 2s infinite;
-                outline: 2px solid var(--red);
-                outline-offset: 1px;
-            }*/
     #history > div > aside[data-important="True"] {
         display: flex;
     }
@@ -55,14 +48,14 @@
         display: none;
         align-items: center;
         justify-content: center;
-        background: var(--red);
+        background: hsl(var(--destructive));
         width: 20px;
         height: 20px;
         border-radius: 50%;
     }
 
         #history > div > aside > svg {
-            color: var(--red);
+            color: white;
             width: 14px;
             height: 14px;
             filter: brightness(50%);

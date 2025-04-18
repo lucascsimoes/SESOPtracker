@@ -6,11 +6,9 @@
 
     main#container > section > main {
         padding: 20px;
-        background: var(--foreground);
+        background: hsl(var(--background));
+        border: 1px solid hsl(var(--border));
     }
-
-        main#container > section > main > table {
-        }
 
     main#container > section > header {
         display: flex;
@@ -21,8 +19,8 @@
         main#container > section > header > button {
             position: relative;
             padding: 10px 50px 10px 20px;
-            border: none;
-            background: var(--foreground);
+            border: 1px solid hsl(var(--border));
+            background: hsl(var(--background));
             font-size: 13px;
             transition: background .3s;
         }
@@ -35,14 +33,12 @@
                 color: var(--primary);
                 pointer-events: none;
                 user-select: none;
-            }
-
-            main#container > section > header > button {
-                color: var(--input-border);
+                font-weight: bold;
             }
 
             main#container > section > header > button:hover {
-                background: var(--foreground-hover);
+                background: hsl(var(--accent));
+                color: hsl(var(--accent-foreground));
                 transition: background .3s;
             }
 
@@ -56,24 +52,14 @@
                 top: 0;
                 height: 100%;
                 font-size: 11px;
-                color: var(--input-border);
-            }
-
-            main#container > section > header > button.current::after {
-                color: var(--primary-400);
             }
 
     main#container > section h4 {
         font-size: 17px;
     }
 
-
-.accordion > .accordion-item > .accordion-header > button {
-    background: var(--background);
+.accordion > .accordion-item > .accordion-header .count-rows {
+    font-size: 13px;
+    margin-left: auto;
+    opacity: .7;
 }
-
-    .accordion > .accordion-item > .accordion-header .count-rows {
-        font-size: 13px;
-        margin-left: auto;
-        opacity: .7;
-    }

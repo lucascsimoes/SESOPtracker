@@ -4,17 +4,18 @@
 
     table > thead > tr {
         position: sticky;
-        top: 65px;
+        top: 64px;
         z-index: 2;
         height: 40px;
         vertical-align: middle;
         box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+        z-index: 1;
     }
 
 table th {
     padding-block: 40px;
-    background: var(--foreground-hover) !important;
-    color: var(--text) !important;
+    background: hsl(var(--input)) !important;
+    color: hsl(var(--foreground)) !important;
     font-weight: normal !important;
     padding: 0 30px !important;
     border: none;
@@ -36,12 +37,12 @@ table th {
 table > tbody::before {
     line-height: 10px;
     content: '.';
-    color: var(--background);
+    color: hsl(var(--background));
     display: block;
 }
 
     table > tbody > tr {
-        background: var(--background);
+        background: hsl(var(--background));
         cursor: pointer;
     }
 
@@ -58,7 +59,7 @@ table > tbody::before {
             background: transparent !important;
             padding: 20px 30px !important;
             border: none;
-            color: var(--text) !important;
+            color: hsl(var(--foreground)) !important;
         }
 
             table > tbody > tr > td > span {

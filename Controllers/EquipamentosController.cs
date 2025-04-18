@@ -32,6 +32,8 @@ namespace SESOPtracker.Controllers
         public async Task<IActionResult> Index(string viewBy) {
             if (viewBy != null) {
                 viewBy = viewBy.Split("?")[0];
+            } else {
+                viewBy = "";
             }
 
 

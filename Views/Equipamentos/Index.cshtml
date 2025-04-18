@@ -23,7 +23,7 @@
 }
 
 <section>
-    <header>
+    <header style="@(viewBy == "" ? "display: flex" : "display: none")">
         <button data-count-status="todos" class="current" data-quantity="0"> Todos </button>
         <button data-count-status="uso" data-quantity="0"> Em uso </button>
         <button data-count-status="manutenção" data-quantity="0"> Em manutenção </button>
@@ -33,411 +33,411 @@
         <button data-count-status="importante" data-quantity="0"> Possui importante </button>
     </header>
     <main>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.patrimonio)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.item)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.nome)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.subCategoria)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.categoria)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.setor)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Sala)
-                    </th>
-                    <th style="display: none">
-                        @Html.DisplayNameFor(model => model.Situacao)
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model) {
-                    <tr 
-                    onclick="location.href='@Url.Action("Details", new { id = item.patrimonio })'" 
-                    data-has-important="@item.Historico.Any(h => h.importante).ToString().ToLower()"
-                    style="background: @item.Situacao.ToRgb(item.Situacao.cor + "10"); border-left: 3px solid @Html.DisplayFor(modelItem => item.Situacao.cor)"
-                    >
-                    <td>
-                        @Html.DisplayFor(modelItem => item.patrimonio)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.item)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.nome)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.subCategoria)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.categoria)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.setor)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Sala.local)
-                    </td>
-                    <td style="display: none">
-                        @Html.DisplayFor(modelItem => item.Situacao.descricao)
-                    </td>
-                </tr>
-            }
-        </tbody>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.patrimonio)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.item)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.nome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.subCategoria)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.categoria)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.setor)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Sala)
+                </th>
+                <th style="display: none">
+                    @Html.DisplayNameFor(model => model.Situacao)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+                <tr 
+                onclick="location.href='@Url.Action("Details", new { id = item.patrimonio })'" 
+                data-has-important="@item.Historico.Any(h => h.importante).ToString().ToLower()"
+                style="background: @item.Situacao.ToRgb(item.Situacao.cor + "10"); border-left: 3px solid @Html.DisplayFor(modelItem => item.Situacao.cor)"
+                >
+                <td>
+                    @Html.DisplayFor(modelItem => item.patrimonio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.item)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.subCategoria)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.categoria)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.setor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sala.local)
+                </td>
+                <td style="display: none">
+                    @Html.DisplayFor(modelItem => item.Situacao.descricao)
+                </td>
+            </tr>
+        }
+    </tbody>
     </table>
+        @* @if (viewBy == "Categoria") {
+            <div class="accordion">
+                @foreach (var categoriaGroup in equipamentosPorCategoria) {
+                    <div class="accordion-item">
+                        <h4 class="accordion-header">
+                            <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#@categoriaGroup.Key.Replace(" ", "")" aria-expanded="true">
+                                @categoriaGroup.Key
+                                <span class="count-rows"></span>
+                            </button>
+                        </h4>
+                        <div id="@categoriaGroup.Key.Replace(" ", "")" class="accordion-collapse collapse show">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.patrimonio)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.item)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.nome)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.subCategoria)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.categoria)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.setor)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Sala)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in categoriaGroup) {
+                                        <tr onclick="location.href='@Url.Action("Details", new { id = item.patrimonio })'" style="background: @item.Situacao.ToRgb(item.Situacao.cor + "10"); border-left: 3px solid @Html.DisplayFor(modelItem => item.Situacao.cor)">
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.patrimonio)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.item)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.nome)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.subCategoria)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.categoria)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.setor)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Sala.local)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        @if (viewBy == "Situacao") {
+            <div class="accordion">
+                @foreach (var situacaoGroup in equipamentosPorSituacao) {
+                    <div class="accordion-item">
+                        <h4 class="accordion-header">
+                            <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#@situacaoGroup.Key.Replace(" ", "")" aria-expanded="true">
+                                @situacaoGroup.Key
+                                <span class="count-rows"></span>
+                            </button>
+                        </h4>
+                        <div id="@situacaoGroup.Key.Replace(" ", "")" class="accordion-collapse collapse show">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.patrimonio)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.item)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.nome)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.subCategoria)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.categoria)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.setor)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Sala)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in situacaoGroup) {
+                                        <tr onclick="location.href='@Url.Action("Details", new { id = item.patrimonio })'" style="background: @item.Situacao.ToRgb(item.Situacao.cor + "10"); border-left: 3px solid @Html.DisplayFor(modelItem => item.Situacao.cor)">
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.patrimonio)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.item)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.nome)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.subCategoria)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.categoria)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.setor)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Sala.local)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        @if (viewBy == "Sala") {
+            <div class="accordion">
+                @foreach (var salaGroup in equipamentosPorSala) {
+                    <div class="accordion-item">
+                        <h4 class="accordion-header">
+                            <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#@salaGroup.Key.Replace(" ", "")" aria-expanded="true">
+                                @salaGroup.Key
+                                <span class="count-rows"></span>
+                            </button>
+                        </h4>
+                        <div id="@salaGroup.Key.Replace(" ", "")" class="accordion-collapse collapse show">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.patrimonio)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.item)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.nome)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.subCategoria)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.categoria)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.setor)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Sala)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in salaGroup) {
+                                        <tr onclick="location.href='@Url.Action("Details", new { id = item.patrimonio })'" style="background: @item.Situacao.ToRgb(item.Situacao.cor + "10"); border-left: 3px solid @Html.DisplayFor(modelItem => item.Situacao.cor)">
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.patrimonio)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.item)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.nome)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.subCategoria)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.categoria)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.setor)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Sala.local)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        @if (viewBy == "Setor") {
+            <div class="accordion">
+                @foreach (var setorGroup in equipamentosPorSetor) {
+                    <div class="accordion-item">
+                        <h4 class="accordion-header">
+                            <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#@setorGroup.Key.Replace(" ", "")" aria-expanded="true">
+                                @setorGroup.Key
+                                <span class="count-rows"></span>
+                            </button>
+                        </h4>
+                        <div id="@setorGroup.Key.Replace(" ", "")" class="accordion-collapse collapse show">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.patrimonio)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.item)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.nome)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.subCategoria)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.categoria)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.setor)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Sala)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in setorGroup) {
+                                        <tr onclick="location.href='@Url.Action("Details", new { id = item.patrimonio })'" style="background: @item.Situacao.ToRgb(item.Situacao.cor + "10"); border-left: 3px solid @Html.DisplayFor(modelItem => item.Situacao.cor)">
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.patrimonio)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.item)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.nome)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.subCategoria)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.categoria)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.setor)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Sala.local)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        @if (viewBy == "" || viewBy == null) {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.patrimonio)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.item)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.nome)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.subCategoria)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.categoria)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.setor)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Sala)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                        <tr onclick="location.href='@Url.Action("Details", new { id = item.patrimonio })'" style="background: @item.Situacao.ToRgb(item.Situacao.cor + "10"); border-left: 3px solid @Html.DisplayFor(modelItem => item.Situacao.cor)">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.patrimonio)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.item)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.nome)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.subCategoria)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.categoria)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.setor)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sala.local)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        } *@
     </main>
-    @* @if (viewBy == "Categoria") { *@
-    @*     <div class="accordion"> *@
-    @*         @foreach (var categoriaGroup in equipamentosPorCategoria) { *@
-    @*             <div class="accordion-item"> *@
-    @*                 <h4 class="accordion-header"> *@
-    @*                     <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#@categoriaGroup.Key.Replace(" ", "")" aria-expanded="true"> *@
-    @*                         @categoriaGroup.Key *@
-    @*                         <span class="count-rows"></span> *@
-    @*                     </button> *@
-    @*                 </h4> *@
-    @*                 <div id="@categoriaGroup.Key.Replace(" ", "")" class="accordion-collapse collapse show"> *@
-    @*                     <table class="table"> *@
-    @*                         <thead> *@
-    @*                             <tr> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.patrimonio) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.item) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.nome) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.subCategoria) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.categoria) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.setor) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.Sala) *@
-    @*                                 </th> *@
-    @*                             </tr> *@
-    @*                         </thead> *@
-    @*                         <tbody> *@
-    @*                             @foreach (var item in categoriaGroup) { *@
-    @*                                 <tr onclick="location.href='@Url.Action("Details", new { id = item.patrimonio })'" style="background: @item.Situacao.ToRgb(item.Situacao.cor + "10"); border-left: 3px solid @Html.DisplayFor(modelItem => item.Situacao.cor)"> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.patrimonio) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.item) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.nome) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.subCategoria) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.categoria) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.setor) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.Sala.local) *@
-    @*                                     </td> *@
-    @*                                 </tr> *@
-    @*                             } *@
-    @*                         </tbody> *@
-    @*                     </table> *@
-    @*                 </div> *@
-    @*             </div> *@
-    @*         } *@
-    @*     </div> *@
-    @* } *@
-    @* @if (viewBy == "Situacao") { *@
-    @*     <div class="accordion"> *@
-    @*         @foreach (var situacaoGroup in equipamentosPorSituacao) { *@
-    @*             <div class="accordion-item"> *@
-    @*                 <h4 class="accordion-header"> *@
-    @*                     <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#@situacaoGroup.Key.Replace(" ", "")" aria-expanded="true"> *@
-    @*                         @situacaoGroup.Key *@
-    @*                         <span class="count-rows"></span> *@
-    @*                     </button> *@
-    @*                 </h4> *@
-    @*                 <div id="@situacaoGroup.Key.Replace(" ", "")" class="accordion-collapse collapse show"> *@
-    @*                     <table class="table"> *@
-    @*                         <thead> *@
-    @*                             <tr> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.patrimonio) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.item) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.nome) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.subCategoria) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.categoria) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.setor) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.Sala) *@
-    @*                                 </th> *@
-    @*                             </tr> *@
-    @*                         </thead> *@
-    @*                         <tbody> *@
-    @*                             @foreach (var item in situacaoGroup) { *@
-    @*                                 <tr onclick="location.href='@Url.Action("Details", new { id = item.patrimonio })'" style="background: @item.Situacao.ToRgb(item.Situacao.cor + "10"); border-left: 3px solid @Html.DisplayFor(modelItem => item.Situacao.cor)"> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.patrimonio) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.item) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.nome) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.subCategoria) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.categoria) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.setor) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.Sala.local) *@
-    @*                                     </td> *@
-    @*                                 </tr> *@
-    @*                             } *@
-    @*                         </tbody> *@
-    @*                     </table> *@
-    @*                 </div> *@
-    @*             </div> *@
-    @*         } *@
-    @*     </div> *@
-    @* } *@
-    @* @if (viewBy == "Sala") { *@
-    @*     <div class="accordion"> *@
-    @*         @foreach (var salaGroup in equipamentosPorSala) { *@
-    @*             <div class="accordion-item"> *@
-    @*                 <h4 class="accordion-header"> *@
-    @*                     <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#@salaGroup.Key.Replace(" ", "")" aria-expanded="true"> *@
-    @*                         @salaGroup.Key *@
-    @*                         <span class="count-rows"></span> *@
-    @*                     </button> *@
-    @*                 </h4> *@
-    @*                 <div id="@salaGroup.Key.Replace(" ", "")" class="accordion-collapse collapse show"> *@
-    @*                     <table class="table"> *@
-    @*                         <thead> *@
-    @*                             <tr> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.patrimonio) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.item) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.nome) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.subCategoria) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.categoria) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.setor) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.Sala) *@
-    @*                                 </th> *@
-    @*                             </tr> *@
-    @*                         </thead> *@
-    @*                         <tbody> *@
-    @*                             @foreach (var item in salaGroup) { *@
-    @*                                 <tr onclick="location.href='@Url.Action("Details", new { id = item.patrimonio })'" style="background: @item.Situacao.ToRgb(item.Situacao.cor + "10"); border-left: 3px solid @Html.DisplayFor(modelItem => item.Situacao.cor)"> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.patrimonio) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.item) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.nome) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.subCategoria) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.categoria) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.setor) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.Sala.local) *@
-    @*                                     </td> *@
-    @*                                 </tr> *@
-    @*                             } *@
-    @*                         </tbody> *@
-    @*                     </table> *@
-    @*                 </div> *@
-    @*             </div> *@
-    @*         } *@
-    @*     </div> *@
-    @* } *@
-    @* @if (viewBy == "Setor") { *@
-    @*     <div class="accordion"> *@
-    @*         @foreach (var setorGroup in equipamentosPorSetor) { *@
-    @*             <div class="accordion-item"> *@
-    @*                 <h4 class="accordion-header"> *@
-    @*                     <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#@setorGroup.Key.Replace(" ", "")" aria-expanded="true"> *@
-    @*                         @setorGroup.Key *@
-    @*                         <span class="count-rows"></span> *@
-    @*                     </button> *@
-    @*                 </h4> *@
-    @*                 <div id="@setorGroup.Key.Replace(" ", "")" class="accordion-collapse collapse show"> *@
-    @*                     <table class="table"> *@
-    @*                         <thead> *@
-    @*                             <tr> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.patrimonio) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.item) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.nome) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.subCategoria) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.categoria) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.setor) *@
-    @*                                 </th> *@
-    @*                                 <th> *@
-    @*                                     @Html.DisplayNameFor(model => model.Sala) *@
-    @*                                 </th> *@
-    @*                             </tr> *@
-    @*                         </thead> *@
-    @*                         <tbody> *@
-    @*                             @foreach (var item in setorGroup) { *@
-    @*                                 <tr onclick="location.href='@Url.Action("Details", new { id = item.patrimonio })'" style="background: @item.Situacao.ToRgb(item.Situacao.cor + "10"); border-left: 3px solid @Html.DisplayFor(modelItem => item.Situacao.cor)"> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.patrimonio) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.item) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.nome) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.subCategoria) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.categoria) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.setor) *@
-    @*                                     </td> *@
-    @*                                     <td> *@
-    @*                                         @Html.DisplayFor(modelItem => item.Sala.local) *@
-    @*                                     </td> *@
-    @*                                 </tr> *@
-    @*                             } *@
-    @*                         </tbody> *@
-    @*                     </table> *@
-    @*                 </div> *@
-    @*             </div> *@
-    @*         } *@
-    @*     </div> *@
-    @* } *@
-    @* @if (viewBy == "" || viewBy == null) { *@
-    @*     <table class="table"> *@
-    @*         <thead> *@
-    @*             <tr> *@
-    @*                 <th> *@
-    @*                     @Html.DisplayNameFor(model => model.patrimonio) *@
-    @*                 </th> *@
-    @*                 <th> *@
-    @*                     @Html.DisplayNameFor(model => model.item) *@
-    @*                 </th> *@
-    @*                 <th> *@
-    @*                     @Html.DisplayNameFor(model => model.nome) *@
-    @*                 </th> *@
-    @*                 <th> *@
-    @*                     @Html.DisplayNameFor(model => model.subCategoria) *@
-    @*                 </th> *@
-    @*                 <th> *@
-    @*                     @Html.DisplayNameFor(model => model.categoria) *@
-    @*                 </th> *@
-    @*                 <th> *@
-    @*                     @Html.DisplayNameFor(model => model.setor) *@
-    @*                 </th> *@
-    @*                 <th> *@
-    @*                     @Html.DisplayNameFor(model => model.Sala) *@
-    @*                 </th> *@
-    @*             </tr> *@
-    @*         </thead> *@
-    @*         <tbody> *@
-    @*             @foreach (var item in Model) { *@
-    @*                 <tr onclick="location.href='@Url.Action("Details", new { id = item.patrimonio })'" style="background: @item.Situacao.ToRgb(item.Situacao.cor + "10"); border-left: 3px solid @Html.DisplayFor(modelItem => item.Situacao.cor)"> *@
-    @*                     <td> *@
-    @*                         @Html.DisplayFor(modelItem => item.patrimonio) *@
-    @*                     </td> *@
-    @*                     <td> *@
-    @*                         @Html.DisplayFor(modelItem => item.item) *@
-    @*                     </td> *@
-    @*                     <td> *@
-    @*                         @Html.DisplayFor(modelItem => item.nome) *@
-    @*                     </td> *@
-    @*                     <td> *@
-    @*                         @Html.DisplayFor(modelItem => item.subCategoria) *@
-    @*                     </td> *@
-    @*                     <td> *@
-    @*                         @Html.DisplayFor(modelItem => item.categoria) *@
-    @*                     </td> *@
-    @*                     <td> *@
-    @*                         @Html.DisplayFor(modelItem => item.setor) *@
-    @*                     </td> *@
-    @*                     <td> *@
-    @*                         @Html.DisplayFor(modelItem => item.Sala.local) *@
-    @*                     </td> *@
-    @*                 </tr> *@
-    @*             } *@
-    @*         </tbody> *@
-    @*     </table> *@
-    @* } *@
 </section>
 
-@await Html.PartialAsync("Parts/_GenerateByEquipmentList", Model)
-@await Html.PartialAsync("Parts/_GenerateByKeyword", Model)
+@* @await Html.PartialAsync("Parts/_GenerateByEquipmentList", Model)
+@await Html.PartialAsync("Parts/_GenerateByKeyword", Model) *@
 
 <script>
     const tabButtons = document.querySelectorAll("[data-count-status]");
@@ -466,8 +466,6 @@
         let visibleCount = 0; // Contador para a aba atual
 
         tableRows.forEach(row => {
-                console.log(`Row data-has-important: ${row.dataset.hasImportant}`); // Log para depuração
-
             const situacao = row.querySelector("td:last-child").innerText.trim().toLowerCase();
             const rowText = row.innerText.trim().toLowerCase();
 

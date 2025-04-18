@@ -12,12 +12,12 @@
         }
 
             .accordion > .accordion-item > .accordion-header > button {
-                background: transparent;
-                color: var(--text);
-                border: 1px solid var(--input-border);
+                background: hsl(var(--background));
+                color: hsl(var(--foreground));
                 border-radius: 5px !important;
                 box-shadow: none;
                 z-index: 0;
+                transition: background .3s;
             }
 
                 .accordion > .accordion-item > .accordion-header > button::after {
@@ -27,14 +27,12 @@
                 }
 
                 .accordion > .accordion-item > .accordion-header > button:hover {
-                    filter: brightness(130%);
+                    background: hsl(var(--accent));
+                    color: hsl(var(--accent-foreground));
+                    transition: background .3s;
                 }
 
                 .accordion > .accordion-item > .accordion-header > button:focus {
                     box-shadow: none;
                     outline: none;
                 }
-
-            .accordion > .accordion-item > .accordion-collapse {
-            
-            }

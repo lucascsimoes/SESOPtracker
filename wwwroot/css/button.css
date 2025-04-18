@@ -15,7 +15,7 @@
 
 .btn-default:not([disabled]):hover {
     color: black;
-    background: var(--primary-600);
+    background: var(--primary-foreground);
     transition: background .3s;
 }
 
@@ -28,15 +28,14 @@
     height: 43px;
     color: black;
     border: none;
-    background: var(--input);
+    background: hsl(var(--input));
     border-radius: 5px;
     padding-inline: 20px;
     transition: background .3s;
-    color: var(--text);
 }
 
 .btn-secondary:not([disabled]):hover {
-    background: var(--input-border);
+    background: hsl(var(--border));
     transition: background .3s;
 }
 
@@ -48,6 +47,7 @@
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
+    color: black;
 }
 
     .btn-default > svg,
@@ -57,7 +57,7 @@
     }
 
     .btn-secondary > svg {
-        color: var(--text); 
+        color: hsl(var(--accent)); 
     }
 
 .btn-default[disabled],
@@ -77,12 +77,11 @@
 }
 
     .btn-ghost:hover {
-        background: var(--foreground-hover);
+        background: hsl(var(--accent));
         transition: background .3s;
     }
 
     .btn-ghost svg {
-        color: var(--text);
         width: 28px;
         height: 28px;
         padding: 6px;

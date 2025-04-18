@@ -8,11 +8,14 @@ fieldset {
     gap: 10px;
     width: 100%;
     height: 43px;
-    background: var(--input);
     border-radius: 3px;
     position: relative;
-    border: 1px solid var(--input-border);
+    border: 1px solid hsl(var(--border));
 }
+
+    fieldset:has(input) {
+        background: hsl(var(--input));
+    }
 
     fieldset > select {
         position: relative;
@@ -20,6 +23,7 @@ fieldset {
         cursor: pointer;
         padding-inline: 20px 40px !important;
         z-index: 1;
+        color: hsl(var(--foreground));
     }
 
 fieldset:has(select)::after {
@@ -31,11 +35,9 @@ fieldset:has(select)::after {
     right: 0;
     inset-block: 0;
     margin-block: auto;
-    color: var(--text);
     font-size: 9px;
     width: 40px;
     height: 90%;
-    background: var(--input);
 }
 
     fieldset > input,
@@ -46,7 +48,6 @@ fieldset:has(select)::after {
         padding-inline: 20px;
         background: transparent !important;
         border: none;
-        color: var(--text);
         font-size: 14px;
     }
 
@@ -67,8 +68,8 @@ fieldset:has(select)::after {
     }
 
         fieldset select option {
-            color: var(--text);
-            background: var(--foreground);
+            color: hsl(var(--foreground));
+            background: hsl(var(--background));
         }
 
     fieldset button:not(:read-only):focus,
