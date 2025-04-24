@@ -3,9 +3,11 @@
     flex-direction: column;
     width: 260px;
     height: 280px;
-    background: var(--foreground);
+    background: hsl(var(--background));
+    border: 1px solid hsl(var(--border));
     border-radius: 5px;
     padding: 20px;
+    text-decoration: none;
 }
 
     a.equipamento > header {
@@ -27,13 +29,14 @@
     a.equipamento > span {
         display: block;
         padding-block: 7px;
-        border-block: 1px solid var(--foreground-hover);
+        border-block: 1px solid hsl(var(--border));
         font-size: 13px;
         margin-block: 10px;
     }
 
     a.equipamento > h3 {
         margin-top: 15px;
+        color: hsl(var(--foreground));
     }
 
         a.equipamento > div > span:first-child {
@@ -49,7 +52,7 @@
     a.equipamento > footer {
         margin-top: auto;
         padding-top: 20px;
-        border-top: 1px solid var(--foreground-hover);
+        border-top: 1px solid hsl(var(--border));
     }
 
         a.equipamento > footer > p {

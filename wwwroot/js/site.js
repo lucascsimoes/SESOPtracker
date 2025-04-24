@@ -3,7 +3,7 @@
 
     document.querySelectorAll('#menu button').forEach(element => element.classList.remove('current'))
 
-    if (path == "/") {
+    if (path == "/" || path.includes("Equipamentos")) {
         document.getElementById("nav-home").classList.add('current')
     } else if (path.includes('Salas')) {
         document.getElementById("nav-salas").classList.add('current')

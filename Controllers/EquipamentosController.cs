@@ -16,6 +16,7 @@ using System.Globalization;
 using CsvHelper.Configuration;
 using Microsoft.SqlServer.Server;
 using OfficeOpenXml;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace SESOPtracker.Controllers
 {
@@ -36,8 +37,11 @@ namespace SESOPtracker.Controllers
                 viewBy = "";
             }
 
+            ViewData["StatusList"] = new SelectList(_context.Situacoes, "situacaoId", "descricao");
+            ViewData["SalasList"] = new SelectList(_context.Salas, "salaId", "local");
 
-           var equipamentos = from e in _context.Equipamentos.Include(e => e.Sala).Include(e => e.Situacao).Include(e => e.Historico)
+
+            var equipamentos = from e in _context.Equipamentos.Include(e => e.Sala).Include(e => e.Situacao).Include(e => e.Historico)
                                    select e;
 
             var equipamentosList = await equipamentos.ToListAsync();
@@ -158,8 +162,25 @@ namespace SESOPtracker.Controllers
                 equipamento.setor = equipamento.setor.ToUpper();
             }
 
-            ModelState.Remove("sala");
-            ModelState.Remove("situacao");
+            if (int.TryParse(equipamento.sala.ToString(), out int salaId)) {
+                var salaFind = await _context.Salas.FirstOrDefaultAsync(s => s.salaId == salaId);
+                if (salaFind == null) {
+                    ModelState.AddModelError("sala", "A sala é obrigatória");
+                } else {
+                    equipamento.sala = salaId;
+                    ModelState.Remove("sala");
+                }
+            } else {
+                ModelState.AddModelError("sala", "Valor para sala inválido");
+            }
+
+            if (int.TryParse(equipamento.situacao.ToString(), out int situacaoId)) {
+                equipamento.situacao = situacaoId;
+                ModelState.Remove("situacao");
+            } else {
+                ModelState.AddModelError("situacao", "Situação não encontrada");
+            }
+
             ModelState.Remove("multiple");
             ModelState.Remove("Historico");
 
@@ -179,6 +200,8 @@ namespace SESOPtracker.Controllers
 
                 _context.Historicos.Add(historico);
                 await _context.SaveChangesAsync();
+
+                TempData["AddEquipment"] = true;
 
                 if (multiple == "on") {
                     TempData["Equipamento"] = new Dictionary<string, string>
@@ -322,6 +345,7 @@ namespace SESOPtracker.Controllers
             }
 
             await _context.SaveChangesAsync();
+            TempData["DeletedEquipment"] = true;
             return RedirectToAction(nameof(Index));
         }
 
@@ -450,10 +474,6 @@ namespace SESOPtracker.Controllers
 
         [HttpPost]
         public IActionResult EditTag(string id, [FromBody] TagUpdateModel model) {
-            if (model == null || string.IsNullOrWhiteSpace(model.Tag)) {
-                return BadRequest("O valor da tag é inválido.");
-            }
-
             var equipamento = _context.Equipamentos.FirstOrDefault(e => e.patrimonio == id);
             if (equipamento == null) {
                 return NotFound("Equipamento não encontrado.");
@@ -462,11 +482,99 @@ namespace SESOPtracker.Controllers
             equipamento.tag = model.Tag;
             _context.SaveChanges();
 
+            if (equipamento.tag == null) {
+                TempData["RemoveTag"] = true;
+            }
+
             return Ok("Tag atualizada com sucesso.");
         }
 
         public class TagUpdateModel {
             public string? Tag { get; set; }
         }
+
+        [HttpPost]
+        public IActionResult BeforeEdit([FromBody] string subCategoria) {
+            if (string.IsNullOrWhiteSpace(subCategoria)) {
+                return BadRequest(new { error = "A subcategoria é obrigatória." });
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EquipmentsPatrimonio() {
+            try {
+                // Consulta todos os equipamentos com os relacionamentos necessários
+                var equipamentos = await _context.Equipamentos
+                    .Select(e => e.patrimonio)
+                    .ToListAsync();
+
+                // Retorna os dados no formato JSON
+                return Ok(equipamentos);
+            } catch (Exception ex) {
+                // Loga o erro para depuração
+                Console.WriteLine($"Erro ao buscar equipamentos: {ex.Message}");
+                return StatusCode(500, "Ocorreu um erro ao buscar os equipamentos.");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BindEquipmentsAsync([FromBody] BindEquipmentsModel model) {
+            if (model == null || string.IsNullOrEmpty(model.ToBind) || string.IsNullOrEmpty(model.Equipment)) {
+                return BadRequest("Os dados enviados são inválidos.");
+            }
+
+            var equipmentToBind = await _context.Equipamentos.FirstOrDefaultAsync(e => e.patrimonio == model.ToBind);
+            var situacaoToBind = await _context.Situacoes
+                .Where(s => s.descricao == "Transferido")
+                .Select(s => s.situacaoId)
+                .FirstOrDefaultAsync();
+
+            if (situacaoToBind == 0) {
+                return BadRequest("A situação 'Transferido' não foi encontrada.");
+            }
+
+            var historicoEquipmentToBind = new Historico {
+                patrimonio = equipmentToBind!.patrimonio,
+                dataAlteracao = DateTime.Now.ToString("dd/MM/yyyy HH:mm"),
+                situacaoAtual = situacaoToBind,
+                descricao = "Vinculado ao equipamento '" + model.Equipment + "'",
+                observacao = null,
+                importante = false
+            };
+
+            equipmentToBind.situacao = situacaoToBind;
+
+            _context.Equipamentos.Update(equipmentToBind);
+            await _context.SaveChangesAsync();
+
+            _context.Historicos.Add(historicoEquipmentToBind);
+            await _context.SaveChangesAsync();
+
+
+
+            var equipmentCurrent = await _context.Equipamentos.FirstOrDefaultAsync(e => e.patrimonio == model.Equipment);
+
+            var historicoEquipmentCurrent = new Historico {
+                patrimonio = equipmentCurrent!.patrimonio,
+                dataAlteracao = DateTime.Now.ToString("dd/MM/yyyy HH:mm"),
+                situacaoAtual = equipmentCurrent.situacao,
+                descricao = "Equipamento '" + model.ToBind + "' vinculado a este",
+                observacao = null,
+                importante = false
+            };
+
+            _context.Historicos.Add(historicoEquipmentCurrent);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        public class BindEquipmentsModel {
+            public string ToBind { get; set; } // Equipamento a ser vinculado
+            public string Equipment { get; set; } // Equipamento atual
+        }
+
     }
 }

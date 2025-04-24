@@ -4,7 +4,7 @@
 
 [data-bs-theme="dark"] {
     --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --foreground: 0 0% 85%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
@@ -16,8 +16,8 @@
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
     --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
+    --accent-foreground: 0 0% 85%;
+    --destructive: 354 70.5% 53.5%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
@@ -96,4 +96,22 @@ body {
 .hl-vertical {
     width: 30px;
     transform: rotate(90deg);
+}
+
+::-webkit-scrollbar {
+    background: transparent;
+    border: 1px solid hsl(var(--border));
+    border-radius: 4px;
+    width: 14px;
+}
+
+::-webkit-scrollbar-track {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: hsl(var(--accent));
+    border: 4px solid transparent;
+    border-radius: 8px;
+    background-clip: content-box;
 }

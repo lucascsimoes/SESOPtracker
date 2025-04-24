@@ -44,6 +44,7 @@ table > tbody::before {
     table > tbody > tr {
         background: hsl(var(--background));
         cursor: pointer;
+        font-size: 15px;
     }
 
         table > tbody > tr:hover {

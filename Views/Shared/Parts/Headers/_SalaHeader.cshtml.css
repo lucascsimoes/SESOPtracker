@@ -1,0 +1,35 @@
+﻿.equipmentActions {
+    display: flex;
+    gap: 15px;
+    margin-left: auto;
+}
+
+    .equipmentActions > button {
+        width: fit-content;
+        white-space: nowrap;
+        transition: filter .3s;
+        color: hsl(var(--foreground));
+    }
+
+        .equipmentActions > button[data-bs-toggle] {
+            background: hsl(var(--destructive));
+            color: white;
+        }
+
+        .equipmentActions > button:hover[data-bs-toggle] {
+            filter: brightness(85%);
+            transition: filter .3s;
+        }
+
+        .equipmentActions > button[data-bs-toggle] > svg * {
+            color: white;
+        }
+
+        .equipmentActions > button > svg {
+            width: 17px;
+            height: 17px;
+        }
+
+            .equipmentActions > button > svg * {
+                color: hsl(var(--foreground));
+            }

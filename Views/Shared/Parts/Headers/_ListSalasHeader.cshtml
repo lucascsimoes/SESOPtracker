@@ -1,0 +1,15 @@
+﻿@model IEnumerable<SESOPtracker.Models.Entities.Sala>
+
+<div class="searchbar">
+    <fieldset>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+        <input placeholder="Pesquise por uma sala" />
+    </fieldset>
+</div>
+<hr class="hl-vertical" />
+<a class="btn-default" asp-action="Create" asp-controller="Salas">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
+    Adicionar sala
+</a>
+
+<script type="module" src="/js/search.js"></script>

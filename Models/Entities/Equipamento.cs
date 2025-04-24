@@ -23,7 +23,7 @@ namespace SESOPtracker.Models.Entities {
         [Required(ErrorMessage = "A categoria é obrigatória")]
         public string categoria { get; set; } = string.Empty; // Informática, Mobília, Telefonia, Audiovisual
 
-        [Display(Name = "Setor")]
+        [Display(Name = "Setor", Prompt = "DITEC, DIEPE, SECAP...")]
         public string? setor { get; set; }
 
         [Display(Name = "Data de criação")]

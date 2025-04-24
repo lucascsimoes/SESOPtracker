@@ -1,0 +1,33 @@
+﻿.importDataContainer {
+    position: relative;
+    margin-right: auto;
+    justify-content: flex-start;
+}
+
+    .importDataContainer span {
+        display: block;
+        max-width: 120px;
+        width: 100%;
+        color: hsl(var(--foreground));
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .importDataContainer.hasFile label {
+        padding-right: 40px;
+    }
+
+        .importDataContainer.hasFile button {
+            display: flex;
+        }
+
+    .importDataContainer button {
+        display: none;
+        position: absolute;
+        right: 5px;
+        inset-block: 0;
+        margin-block: auto;
+        height: min-content;
+        border-radius: 5px;
+    }

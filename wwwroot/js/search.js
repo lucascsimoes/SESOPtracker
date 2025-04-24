@@ -20,7 +20,7 @@
 export function checkMatch(element, text) {
     let matches = 0
     element.querySelectorAll("td").forEach((value) => {
-        if (value.innerText.toLowerCase().trim().includes(text.toLowerCase().trim()) && window.getComputedStyle(element).display != "none") {
+        if (value.innerText.toLowerCase().trim().includes(text.toLowerCase().trim())) {
             matches++
         }
     })

@@ -1,0 +1,4 @@
+﻿button {
+    margin-left: auto;
+    color: hsl(var(--foreground));
+}

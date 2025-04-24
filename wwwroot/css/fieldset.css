@@ -117,6 +117,25 @@ label:has(+ fieldset > select[data-val-required])::after {
     position: absolute;
     inset-block: 0;
     margin-block: auto;
-    color: var(--red);
+    color: hsl(var(--destructive));
     transform: translateY(3px) translateX(4px);
 }
+
+.form-group {
+    position: relative;
+}
+
+    .form-group:has(.field-validation-error) fieldset {
+        outline: 1px solid hsl(var(--destructive));
+        outline-offset: 2px;
+    }
+
+        .field-validation-error {
+            position: absolute;
+            top: -6px;
+            right: 0;
+            display: block;
+            margin-top: 5px;
+            font-size: 15px;
+            color: hsl(var(--destructive));
+        }

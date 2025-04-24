@@ -1,10 +1,18 @@
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using SESOPtracker.Data;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddDataAnnotationsLocalization(options => {
+        options.DataAnnotationLocalizerProvider = (type, factory) =>
+            factory.Create(typeof(Program));
+    });
+
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => {
     var connectionString = builder.Configuration.GetConnectionString("localDb");
@@ -12,6 +20,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => {
 });
 
 var app = builder.Build();
+
+app.UseRequestLocalization(new RequestLocalizationOptions {
+    DefaultRequestCulture = new RequestCulture("pt-BR"),
+    SupportedCultures = new[] { new CultureInfo("pt-BR") },
+    SupportedUICultures = new[] { new CultureInfo("pt-BR") }
+});
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

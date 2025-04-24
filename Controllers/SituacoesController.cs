@@ -67,6 +67,7 @@ namespace SESOPtracker.Controllers
             {
                 _context.Add(situacao);
                 await _context.SaveChangesAsync();
+                TempData["AddStatus"] = true;
                 return RedirectToAction(nameof(Index));
             }
             return View(situacao);
@@ -118,6 +119,8 @@ namespace SESOPtracker.Controllers
                         throw;
                     }
                 }
+
+                TempData["EditStatus"] = true;
                 return RedirectToAction(nameof(Index));
             }
             return View(situacao);
@@ -154,6 +157,8 @@ namespace SESOPtracker.Controllers
 
                 _context.Situacoes.Remove(situacao);
             }
+
+            TempData["DeleteStatus"] = true;
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

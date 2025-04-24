@@ -69,6 +69,9 @@ namespace SESOPtracker.Controllers
             {
                 _context.Add(sala);
                 await _context.SaveChangesAsync();
+
+                TempData["AddSala"] = true;
+
                 return RedirectToAction(nameof(Index));
             }
             return View(sala);
@@ -120,6 +123,8 @@ namespace SESOPtracker.Controllers
                         throw;
                     }
                 }
+
+                TempData["EditSala"] = true;
                 return RedirectToAction(nameof(Index));
             }
             return View(sala);
@@ -156,6 +161,8 @@ namespace SESOPtracker.Controllers
 
                 _context.Salas.Remove(sala);
             }
+
+            TempData["DeleteSala"] = true;
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

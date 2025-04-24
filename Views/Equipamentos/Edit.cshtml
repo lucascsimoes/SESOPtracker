@@ -1,7 +1,9 @@
 ﻿@model SESOPtracker.Models.Entities.Equipamento
 
 @{
-    ViewData["Title"] = "Equipamento " + ViewBag.patrimonio;
+    ViewData["Title"] = "Equipamento " + Model.patrimonio;
+    ViewData["HeaderTitle"] = "Editar equipamento " + Model.patrimonio;
+
     var historico = ViewBag.Historico as SESOPtracker.Models.Entities.Historico;
     var options = new System.Text.Json.JsonSerializerOptions {
         ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve,
@@ -11,29 +13,11 @@
     var modelJson = System.Text.Json.JsonSerializer.Serialize(Model, options);
 }
 
-<header>
-    <div>
-        <button>
-            <a asp-action="Index">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
-                </svg>
-            </a>
-        </button>
-        <span> EDITAR </span>
-        <p> Editar um equipamento </p>
-    </div>
-</header>
-
 <section>
-    @if (TempData["NoChanges"] != null) {
-        <div class="alert alert-danger">
-            Não foi possível enviar pois nenhuma alteração foi realizada
-        </div>
-    }
-
     <form asp-action="Edit" id="editForm">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div hidden class="alert alert-danger" role="alert"> Não foi possível enviar pois nenhuma alteração foi feita </div>
+
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -96,9 +80,7 @@
                 <div class="form-group">
                     <label asp-for="sala" class="control-label"></label>
                     <fieldset>
-                        <select asp-for="sala" class="situacao-select" asp-items="ViewBag.sala">
-                            <option value="" disabled selected> Selecione uma sala </option>
-                        </select>
+                        <select asp-for="sala" class="situacao-select" asp-items="ViewBag.sala"></select>
                     </fieldset>
                     <span asp-validation-for="sala" class="text-danger"></span>
                 </div>
@@ -106,11 +88,13 @@
         </div>
 
         <input asp-for="dataCriacao" hidden />
-        <button type="button" class="btn-default" data-bs-toggle="modal" data-bs-target="#editEquipment">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
-                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
-            </svg>
-        </button>
+        <footer>
+            <button type="button" class="btn-default check-values" data-bs-target="#editEquipment">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                    <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
+                </svg>
+            </button>
+        </footer>
 
         <div class="modal fade" id="editEquipment" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
@@ -147,63 +131,140 @@
 
 
 <script src="/js/create-sala.js"></script>
-@section Scripts {
-    <script>
-        var equipamentoOriginal = @Html.Raw(modelJson);
+<script>
+    var equipamentoOriginal = @Html.Raw(modelJson);
 
-        function setDescricao() {
-            let item = document.getElementById("item").value
-            let nome = document.getElementById("nome").value
-            let setor = document.getElementById("setor").value
-            let subcategoria = document.getElementById("subCategoria").value
-            let categoria = document.getElementById("categoria").value
-            let situacao = document.getElementById("situacao").value
-            let sala = document.getElementById("sala").value
+    function setDescricao() {
+        let item = document.getElementById("item").value
+        let nome = document.getElementById("nome").value
+        let setor = document.getElementById("setor").value
+        let subcategoria = document.getElementById("subCategoria").value
+        let categoria = document.getElementById("categoria").value
+        let situacao = document.getElementById("situacao").value
+        let sala = document.getElementById("sala").value
 
-            item = item == "" ? null : item
-            nome = nome == "" ? null : nome
-            setor = setor == "" ? null : setor
+        item = item == "" ? null : item
+        nome = nome == "" ? null : nome
+        setor = setor == "" ? null : setor
 
-            let descricaoAlteracoes = []
+        let descricaoAlteracoes = []
 
-            if (equipamentoOriginal.item != item) {
-                descricaoAlteracoes.push(`Item alterado de '${equipamentoOriginal.item == null ? "VAZIO" : equipamentoOriginal.item}' para '${item == null ? "VAZIO" : item}'`);
-            }
-
-            if (equipamentoOriginal.nome != nome) {
-                descricaoAlteracoes.push(`Nome alterado de '${equipamentoOriginal.nome == null ? "VAZIO" : equipamentoOriginal.nome}' para '${nome == null ? "VAZIO" : nome}'`);
-            }
-
-            if (equipamentoOriginal.subCategoria != subcategoria) {
-                descricaoAlteracoes.push(`Subcategoria alterada de '${equipamentoOriginal.subCategoria}' para '${subcategoria}'`);
-            }
-
-            if (equipamentoOriginal.categoria != categoria) {
-                descricaoAlteracoes.push(`Categoria alterada de '${equipamentoOriginal.categoria}' para '${categoria}'`);
-            }
-
-            if (equipamentoOriginal.setor != setor) {
-                descricaoAlteracoes.push(`Setor alterado de '${equipamentoOriginal.setor == null ? "VAZIO" : equipamentoOriginal.setor}' para '${setor == null ? "VAZIO" : setor}'`);
-            }
-
-            if (equipamentoOriginal.situacao != situacao) {
-                descricaoAlteracoes.push(`Situação alterada para '${document.getElementById("situacao").querySelector("[selected]").innerText}'`);
-            }
-
-            if (equipamentoOriginal.sala != sala) {
-                descricaoAlteracoes.push(`Sala alterada de '${equipamentoOriginal.sala}' para '${sala}'`);
-            }
-
-            let descricao = descricaoAlteracoes.join(", ");
-            document.getElementById("descricao").value = descricao
-        };
-
-        document.querySelector("[data-bs-target='#editEquipment']").addEventListener('click', () => setDescricao());
-
-        function cancelEdit() {
-            window.location.href = '@Url.Action("Index", "Equipamentos")';
+        if (equipamentoOriginal.item != item) {
+            descricaoAlteracoes.push(`Item alterado de '${equipamentoOriginal.item == null ? "VAZIO" : equipamentoOriginal.item}' para '${item == null ? "VAZIO" : item}'`);
         }
-    </script>
-}
 
+        if (equipamentoOriginal.nome != nome) {
+            descricaoAlteracoes.push(`Nome alterado de '${equipamentoOriginal.nome == null ? "VAZIO" : equipamentoOriginal.nome}' para '${nome == null ? "VAZIO" : nome}'`);
+        }
+
+        if (equipamentoOriginal.subCategoria != subcategoria) {
+            descricaoAlteracoes.push(`Subcategoria alterada de '${equipamentoOriginal.subCategoria}' para '${subcategoria}'`);
+        }
+
+        if (equipamentoOriginal.categoria != categoria) {
+            descricaoAlteracoes.push(`Categoria alterada de '${equipamentoOriginal.categoria}' para '${categoria}'`);
+        }
+
+        if (equipamentoOriginal.setor != setor) {
+            descricaoAlteracoes.push(`Setor alterado de '${equipamentoOriginal.setor == null ? "VAZIO" : equipamentoOriginal.setor}' para '${setor == null ? "VAZIO" : setor}'`);
+        }
+
+        if (equipamentoOriginal.situacao != situacao) {
+            descricaoAlteracoes.push(`Situação alterada para '${document.getElementById("situacao").querySelector("[selected]").innerText}'`);
+        }
+
+        if (equipamentoOriginal.sala != sala) {
+            descricaoAlteracoes.push(`Sala alterada de '${equipamentoOriginal.sala}' para '${sala}'`);
+        }
+
+        let descricao = descricaoAlteracoes.join(", ");
+        document.getElementById("descricao").value = descricao
+    };
+
+    document.querySelector("[data-bs-target='#editEquipment']").addEventListener('click', () => setDescricao());
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        $("#revert").on("click", () => {
+            $("[name=item]").val("@Model.item")
+            $("[name=nome]").val("@Model.nome")
+            $("[name=setor]").val("@Model.setor")
+            $("[name=subCategoria]").val("@Model.subCategoria")
+
+            $("label[for=categoria] + fieldset > select > *").removeAttr("selected")
+            $(`label[for=categoria] + fieldset option[value=${"@Html.Raw(Model.categoria)"}]`).attr("selected", "selected")
+            $("[name=categoria]").val("@Model.categoria")
+
+            $("label[for=situacao] + fieldset > select > *").removeAttr("selected")
+            $(`label[for=situacao] + fieldset option[value=${"@Html.Raw(Model.situacao)"}]`).attr("selected", "selected")
+
+            $("label[for=sala] + fieldset > select > *").removeAttr("selected")
+            $(`label[for=sala] + fieldset option[value=${"@Html.Raw(Model.sala)"}]`).attr("selected", "selected")
+        })
+    })
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const subCategoriaInput = $("[name=subCategoria]");
+        const validationMessage = $("[data-valmsg-for=subCategoria]");
+
+        const rawValues = $(".form-group [name]").slice(0, -3).map(function () {
+            return $(this).val();
+        }).get();
+
+        $(".check-values").on("click", function () {
+            const subCategoriaValue = subCategoriaInput.val();
+
+            validateSubCategoria(subCategoriaValue, function (isValid) {
+                if (isValid) {
+                    validationMessage.removeClass("field-validation-error")
+
+                    const newValues = $(".form-group [name]").slice(0, -3).map(function () {
+                        return $(this).val();
+                    }).get();
+                    
+                    if (!arraysAreEquals(newValues, rawValues)) {
+                        const modalElement = document.getElementById("editEquipment");
+                        const modal = new bootstrap.Modal(modalElement);
+                        modal.show();
+
+                        $(".alert").attr("hidden", "hidden");
+                    } else {
+                        $(".alert").removeAttr("hidden");
+                    }
+                } else {
+                    $(".alert").attr("hidden", "hidden");
+                    validationMessage.addClass("field-validation-error")
+                }
+            });
+        });
+
+        // Função para validar o campo subCategoria
+        function validateSubCategoria(value, callback) {
+            $.ajax({
+                url: '@Url.Action("BeforeEdit", "Equipamentos")',
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(value),
+                success: function () {
+                    validationMessage.text("");
+                    if (callback) callback(true);
+                },
+                error: function (response) {
+                    const errorMessage = response.responseJSON?.error || "Erro ao validar o campo.";
+                    validationMessage.text(errorMessage);
+                    if (callback) callback(false);
+                },
+            });
+        }
+    });
+
+    function arraysAreEquals(arr1, arr2) {
+        if (arr1.length !== arr2.length) {
+            return false;
+        }
+
+        return arr1.every((value, index) => value === arr2[index]);
+    }
+</script>
 

@@ -17,8 +17,24 @@
     <link rel="stylesheet" href="~/css/history.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/modal.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/accordion.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/toast.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/filter-combination.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/selectize.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SESOPtracker.styles.css" asp-append-version="true" />
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css"
+          integrity="sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+            integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+
+    
 </head>
 <body>
     <aside id="menu">
@@ -49,16 +65,30 @@
         <p> @ViewData["HeaderTitle"] </p>
         <hr class="hl-vertical"/>
         <aside id="viewMode">
-            @if (headerTitle == "Equipamentos")         @await Html.PartialAsync("Parts/_ListEquipmentsHeader.cshtml")
-            @if (headerTitle!.Contains("Equipamento ")) @await Html.PartialAsync("Parts/_EquipmentHeader.cshtml")
+            @if (headerTitle!.Contains("Editar equipamento ")) { 
+                @await Html.PartialAsync("Parts/Headers/_EditEquipmentHeader.cshtml") 
+            } else if (headerTitle == "Equipamentos") {
+                @await Html.PartialAsync("Parts/Headers/_ListEquipmentsHeader.cshtml")
+            } else if (headerTitle!.Contains("Equipamento ")) {
+                @await Html.PartialAsync("Parts/Headers/_EquipmentHeader.cshtml")
+            } else if (headerTitle == "Situações") {
+                @await Html.PartialAsync("Parts/Headers/_ListSituacoesHeader.cshtml")
+            } else if (headerTitle!.Contains("Situação ")) {
+                @await Html.PartialAsync("Parts/Headers/_SituacaoHeader.cshtml")
+            } else if (headerTitle == "Salas") {
+                @await Html.PartialAsync("Parts/Headers/_ListSalasHeader.cshtml")
+            } else if (headerTitle!.Contains("Sala ")) {
+                @await Html.PartialAsync("Parts/Headers/_SalaHeader.cshtml")
+            } else if (headerTitle == "Novo equipamento") {
+                @await Html.PartialAsync("Parts/Headers/_CreateEquipmentHeader.cshtml")
+            }
         </aside>
     </header>
 
-    <main id="container">
+    <main id="container" style="padding: @(headerTitle == "Equipamentos" ? "80px 160px 80px 80px" : "80px")">
         @RenderBody()
     </main>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 

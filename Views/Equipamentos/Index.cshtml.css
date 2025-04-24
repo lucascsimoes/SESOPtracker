@@ -1,65 +1,143 @@
-﻿main#container > section {
-    display: flex;
-    flex-direction: column;
-    width: calc(100% - 17px);
+﻿main#container {
+    padding: 0 !important;
+    padding-right: 160px;
+}
+
+main#container > section {
+    display: grid;
+    grid-template-areas:
+        'header header'
+        'main aside';
 }
 
     main#container > section > main {
-        padding: 20px;
-        background: hsl(var(--background));
-        border: 1px solid hsl(var(--border));
+        grid-area: main;
     }
 
-    main#container > section > header {
-        display: flex;
-        gap: 3px;
-        margin-bottom: 3px;
-    }
-
-        main#container > section > header > button {
-            position: relative;
-            padding: 10px 50px 10px 20px;
-            border: 1px solid hsl(var(--border));
+        main#container > section > main > div {
+            padding: 20px;
             background: hsl(var(--background));
-            font-size: 13px;
-            transition: background .3s;
+            border: 1px solid hsl(var(--border));
         }
 
-            main#container > section > header > button:last-child {
-                margin-left: auto;
-            }
+        main#container > section > main > header {
+            grid-area: header;
+            display: flex;
+            gap: 3px;
+            margin-bottom: 3px;
+        }
 
-            main#container > section > header > button.current {
-                color: var(--primary);
-                pointer-events: none;
-                user-select: none;
-                font-weight: bold;
-            }
-
-            main#container > section > header > button:hover {
-                background: hsl(var(--accent));
-                color: hsl(var(--accent-foreground));
+            main#container > section > main > header > button {
+                position: relative;
+                padding: 10px 50px 10px 20px;
+                border: 1px solid hsl(var(--border));
+                background: hsl(var(--background));
+                font-size: 13px;
+                white-space: nowrap;
                 transition: background .3s;
             }
 
-            main#container > section > header > button::after {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                content: attr(data-quantity);
-                position: absolute;
-                right: 10px;
-                top: 0;
-                height: 100%;
-                font-size: 11px;
-            }
+                main#container > section > main > header > button:nth-last-child(2) {
+                    margin-left: auto;
+                }
 
-    main#container > section h4 {
-        font-size: 17px;
+                main#container > section > main > header > button.current {
+                    color: var(--primary);
+                    pointer-events: none;
+                    user-select: none;
+                    font-weight: bold;
+                }
+
+                main#container > section > main > header > button:hover {
+                    background: hsl(var(--accent));
+                    color: hsl(var(--accent-foreground));
+                    transition: background .3s;
+                }
+
+                main#container > section > main > header > button::after {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    content: attr(data-quantity);
+                    position: absolute;
+                    right: 10px;
+                    top: 0;
+                    height: 100%;
+                    font-size: 11px;
+                }
+
+    .filters {
+        position: fixed;
+        right: 0;
+        top: 65px;
+        grid-area: aside;
+        width: 250px;
+        height: calc(100vh - 65px);
+        background: hsl(var(--background));
+        border-left: 1px solid hsl(var(--border));
+        padding: 20px;
+        overflow: auto;
     }
 
-.accordion > .accordion-item > .accordion-header .count-rows {
-    font-size: 13px;
-    margin-left: auto;
-    opacity: .7;
-}
+        .filters h4 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .filters p {
+            font-size: 12px;
+            margin-block: 5px 15px;
+        }
+
+        .filters > div {
+            margin-bottom: 20px;
+        }
+
+        .filter-items {
+            height: 100%;
+            max-height: 250px;
+            overflow: auto;
+        }
+
+            .filter-items:hover::-webkit-scrollbar {
+                display: block;
+            }
+
+            .filter-items::-webkit-scrollbar {
+                display: none;
+            }
+
+            .filter-items > div {
+                margin-block: 5px;
+            }
+
+                .filter-items > div input[type=checkbox] ~ span {
+                    position: relative;
+                    bottom: 3px;
+                    margin-left: 5px;
+                    font-size: 14px;
+                    user-select: none;
+                }
+
+                .filter-items > div input[type=checkbox] + label {
+                    position: relative;
+                    width: 18px;
+                    height: 18px;
+                    border: 1px solid hsl(var(--border));
+                    border-radius: 3px;
+                    cursor: pointer;
+                    user-select: none;
+                }
+
+                .filter-items > div input[type=checkbox]:checked + label::after {
+                    content: '';
+                    position: absolute;
+                    inset: 0;
+                    margin: auto;
+                    width: 100%;
+                    height: 100%;
+                    background: var(--primary);
+                    border: 3px solid transparent;
+                    border-radius: 4px;
+                    background-clip: content-box;
+                }
