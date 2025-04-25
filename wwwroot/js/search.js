@@ -33,20 +33,29 @@ export function checkMatch(element, text) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    const input = document.querySelector(".searchbar fieldset input")
-    const tableRows = document.querySelectorAll("#container section table tbody tr")
+    const input = document.querySelectorAll(".searchbar fieldset input")
+    let tableRows;
 
-    if (input != null) {
-        input.onkeyup = () => {
-            tableRows.forEach((element) => checkMatch(element, input.value))
+    if (input.length != 0) {
+        input.forEach(currentInput => {
+            currentInput.onkeyup = () => {
+                if (currentInput.closest(".modal") != null) {
+                    tableRows = currentInput.closest(".modal").querySelectorAll("table tbody tr")
+                } else {
+                    tableRows = currentInput.closest("#container").querySelectorAll("table tbody tr")
+                }
 
-            const quantity = Array.from(tableRows).filter(item => window.getComputedStyle(item).display == "table-row").length
+                tableRows.forEach((element) => checkMatch(element, currentInput.value))
 
-            if (document.getElementById("quantityResult") != null) {
-                document.getElementById("quantityResult").innerHTML = quantity
+                const quantity = Array.from(tableRows).filter(item => window.getComputedStyle(item).display == "table-row").length
+
+                if (document.getElementById("quantityResult") != null) {
+                    document.getElementById("quantityResult").innerHTML = quantity
+                }
+
+                countRows()
             }
-
-            countRows()
-        }
+        })
+        
     }
 })

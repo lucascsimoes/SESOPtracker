@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = Model.descricao;
     ViewData["HeaderTitle"] = "Situação " + Model.descricao;
+    var deleteSituacaoError = TempData["DeleteSituacaoError"] as bool? ?? false;
 }
 
 <section>
@@ -45,7 +46,8 @@
         <div class="modal-content">
             <div class="modal-body">
                 <h2>Tem certeza que seja deletar a situação '@Model.descricao' ?</h2>
-                <p>Ao concordar em deletar, todos os dados da situação, incluindo os equipamentos que estão vinculados a ela, serão perdidos.</p>
+                <p>Ao concordar em deletar, todos os dados da situação serão perdidos.</p>
+                <p> Deletar esta situação só será possível se não houver nenhum equipamento cadastrado nela. </p>
                 <div>
                     <p> <span> @Html.DisplayNameFor(model => model.descricao) </span> @Html.DisplayFor(modelItem => Model.descricao) </p>
                     <p> <span> @Html.DisplayNameFor(model => model.cor) </span> @Html.DisplayFor(modelItem => Model.cor) </p>
@@ -55,7 +57,10 @@
             <form class="modal-footer" asp-action="DeleteConfirmed">
                 <input type="hidden" name="id" value="@Model.situacaoId" />
                 <button type="button" class="btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <input type="submit" value="Sim, deletar" class="btn btn-danger" />
+                @if (!deleteSituacaoError)
+                {
+                    <input type="submit" value="Sim, deletar" class="btn btn-danger" />
+                }
             </form>
         </div>
     </div>

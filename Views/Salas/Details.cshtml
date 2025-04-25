@@ -2,7 +2,10 @@
 
 @{
     ViewData["Title"] = "Sala " + Model.local;
-    ViewData["HeaderTitle"] = "Sala " + Model.local;
+    ViewData["HeaderTitle"] = "Sala " + Model.local; 
+
+    var addedSala = TempData["AddSala"] as bool? ?? false;
+    var deleteSalaError = TempData["DeleteSalaError"] as bool? ?? false;
 }
 
 <section>
@@ -55,7 +58,8 @@
         <div class="modal-content">
             <div class="modal-body">
                 <h2>Tem certeza que seja deletar a sala @Model.local ?</h2>
-                <p>Ao concordar em deletar, todos os dados da sala, incluindo os equipamentos que nela estão, serão perdidos.</p>
+                <p>Ao concordar em deletar, todos os dados da sala serão perdidos.</p>
+                <p> Deletar esta sala só será possível se não houver nenhum equipamento cadastrado nela. </p>
                 <div>
                     <p> <span> @Html.DisplayNameFor(model => model.local) </span> @Html.DisplayFor(modelItem => Model.local) </p>
                     <p> <span> @Html.DisplayNameFor(model => model.descricao) </span> @Html.DisplayFor(modelItem => Model.descricao) </p>
@@ -65,7 +69,10 @@
             <form class="modal-footer" asp-action="DeleteConfirmed">
                 <input type="hidden" name="id" value="@Model.salaId" />
                 <button type="button" class="btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <input type="submit" value="Sim, deletar" class="btn btn-danger" />
+                @if (!deleteSalaError)
+				{
+                    <input type="submit" value="Sim, deletar" class="btn btn-danger" />
+				}
             </form>
         </div>
     </div>

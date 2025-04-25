@@ -4,19 +4,21 @@
     Array.from(checkAllCheckboxes).forEach(checkbox => {
         checkbox.addEventListener("change", function () {
             let checked = checkbox.checked
-            const rows = checkbox.closest("table").querySelectorAll("tbody tr")
+            let rows = checkbox.closest("table").querySelectorAll("tbody tr")
+            rows = Array.from(rows).filter(item => window.getComputedStyle(item).display == "table-row")
 
             rows.forEach(row => {
                 row.querySelector("input[type=checkbox]").checked = checked
             })
 
-            countRows()
+            countRows(checkbox.closest("table"))
         })
     })
 })
 
-export function countRows() {
-    const count = document.querySelectorAll("table tbody input[type=checkbox]:checked").length
+export function countRows(table) {
+    const count = table.querySelectorAll("tbody input[type=checkbox]:checked").length
+    console.log(table.querySelectorAll("tbody input[type=checkbox]:checked"))
     document.querySelector(".modal-footer > p").textContent = `${count} ${count === 1 ? "equipamento selecionado" : "equipamentos selecionados"}`
 
     if (count > 0) {

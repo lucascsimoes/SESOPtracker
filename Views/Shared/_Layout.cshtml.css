@@ -73,7 +73,7 @@
     width: calc(100% - 80px);
     background: hsl(var(--background));
     border-bottom: 1px solid hsl(var(--border));
-    height: 65px;
+    height: 82px;
     padding-inline: 30px;
     z-index: 2;
 }

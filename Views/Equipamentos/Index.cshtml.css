@@ -69,10 +69,10 @@ main#container > section {
     .filters {
         position: fixed;
         right: 0;
-        top: 65px;
+        top: 82px;
         grid-area: aside;
         width: 250px;
-        height: calc(100vh - 65px);
+        height: calc(100vh - 81px);
         background: hsl(var(--background));
         border-left: 1px solid hsl(var(--border));
         padding: 20px;
@@ -91,6 +91,15 @@ main#container > section {
 
         .filters > div {
             margin-bottom: 20px;
+        }
+
+        .filters > h4 {
+            margin-bottom: 10px;
+        }
+
+        .filters > div > button {
+            width: 100%;
+            margin-block: 5px;
         }
 
         .filter-items {

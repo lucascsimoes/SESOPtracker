@@ -4,7 +4,7 @@
 
     table > thead > tr {
         position: sticky;
-        top: 64px;
+        top: 82px;
         z-index: 2;
         height: 40px;
         vertical-align: middle;
@@ -21,18 +21,6 @@ table th {
     border: none;
     font-size: 13px;
 }
-
-    table th:first-child {
-        border-top-left-radius: 6px;
-        border-bottom-left-radius: 6px;
-    }
-
-    table th:last-child {
-        border-top-right-radius: 6px;
-        border-bottom-right-radius: 6px;
-    }
-
-
 
 table > tbody::before {
     line-height: 10px;

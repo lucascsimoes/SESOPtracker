@@ -6,15 +6,28 @@
     padding: 15px;
     padding-bottom: 10px;
     border-radius: 5px;
-    border: 1px solid var(--input-border);
+    border: 1px solid hsl(var(--border));
     margin-block: 10px;
     cursor: pointer;
     transition: background .3s;
 }
 
     .modal .clickableContainer:hover {
-        background: var(--input);
+        background: hsl(var(--input));
         transition: background .3s;
+    }
+
+    .modal #checkAllEquipmentList + label {
+        border: 1px solid white;
+        top: 3px;
+    }
+
+    .modal table > thead > tr {
+        top: -16px;
+    }
+
+    .modal .modal-body {
+        margin-top: 0;
     }
 
 .modal-content .export {

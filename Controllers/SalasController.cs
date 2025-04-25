@@ -43,6 +43,13 @@ namespace SESOPtracker.Controllers
                 return NotFound();
             }
 
+            var equipamentos = _context.Equipamentos.Where(h => h.sala == id).ToList();
+
+            if (equipamentos.Count() > 0)
+            {
+                TempData["DeleteSalaError"] = true;
+            }
+
             return View(sala);
         }
 
@@ -156,13 +163,9 @@ namespace SESOPtracker.Controllers
             var sala = await _context.Salas.FindAsync(id);
             if (sala != null)
             {
-                var equipamentos = _context.Equipamentos.Where(h => h.sala == id);
-                _context.Equipamentos.RemoveRange(equipamentos);
-
                 _context.Salas.Remove(sala);
+                TempData["DeleteSala"] = true;
             }
-
-            TempData["DeleteSala"] = true;
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

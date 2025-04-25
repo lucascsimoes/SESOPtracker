@@ -7,23 +7,6 @@
     var statusList = ViewData["StatusList"] as IEnumerable<SelectListItem>;
     var salasList = ViewData["SalasList"] as IEnumerable<SelectListItem>;
 
-    // var viewBy = ViewData["viewBy"] as string;
-
-    // var equipamentosPorCategoria = ViewData["EquipamentosPorCategoria"] as List<IGrouping<string, SESOPtracker.Models.Entities.Equipamento>>;
-    // var equipamentosPorSituacao = ViewData["EquipamentosPorSituacao"] as List<IGrouping<string, SESOPtracker.Models.Entities.Equipamento>>;
-    // var equipamentosPorSala = ViewData["EquipamentosPorSala"] as List<IGrouping<string, SESOPtracker.Models.Entities.Equipamento>>;
-    // var equipamentosPorSetor = ViewData["EquipamentosPorSetor"] as List<IGrouping<string, SESOPtracker.Models.Entities.Equipamento>>;
-
-    // var equipamentosSimplificados = Model.Select(e => new
-    // {
-    //     e.patrimonio,
-    //     e.nome,
-    //     e.categoria,
-    //     e.setor,
-    //     Sala = e.Sala != null ? new { e.Sala.local } : null,
-    //     Situacao = e.Situacao != null ? new { e.Situacao.descricao } : null
-    // });
-
     var deletedEquipment = TempData["DeletedEquipment"] as bool? ?? false;
     var addedEquipment = TempData["AddEquipment"] as bool? ?? false;
 }
@@ -66,7 +49,10 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Sala)
                         </th>
-                        <th style="display: none">
+                        <th style="display: none" style-inline>
+                            @Html.DisplayNameFor(model => model.tag)
+                        </th>
+                        <th style="display: none" style-inline>
                             @Html.DisplayNameFor(model => model.Situacao)
                         </th>
                     </tr>
@@ -100,6 +86,9 @@
                                 @Html.DisplayFor(modelItem => item.Sala.local)
                             </td>
                             <td style="display: none">
+                                @Html.DisplayFor(modelItem => item.tag)
+                            </td>
+                            <td style="display: none">
                                 @Html.DisplayFor(modelItem => item.Situacao.descricao)
                             </td>
                         </tr>
@@ -109,7 +98,16 @@
         </div>
     </main>
     <aside class="filters">
-        <div style="display: @(statusList == null ? "none" : "block")">
+        <div>
+            <h4> Relatórios </h4>
+            <button class="btn-secondary" data-bs-toggle="modal" data-bs-target="#equipmentListModal">
+                Por seleção
+            </button>
+            <button class="btn-secondary" data-bs-toggle="modal" data-bs-target="#keywordModal">
+                Por palavra-chave
+            </button>
+        </div>
+        <div class="filter-situacoes" style="display: @(statusList == null ? "none" : "block")">
             <h4> Situações </h4>
             <p> @statusList!.Count() @(statusList!.Count() != 1 ? " disponíveis" : " disponível") </p>
             <div class="filter-items">
@@ -122,7 +120,7 @@
                 }
             </div>
         </div>
-        <div style="display: @(salasList == null ? "none" : "block")">
+        <div class="filter-salas" style="display: @(salasList == null ? "none" : "block")">
             <h4> Salas </h4>
             <p> @salasList!.Count() @(salasList!.Count() != 1 ? " disponíveis" : " disponível") </p>
             <div class="filter-items">
@@ -139,8 +137,8 @@
     </aside>
 </section>
 
-@* @await Html.PartialAsync("Parts/_GenerateByEquipmentList", Model)
-@await Html.PartialAsync("Parts/_GenerateByKeyword", Model) *@
+@await Html.PartialAsync("Parts/_GenerateByEquipmentList", Model)
+@await Html.PartialAsync("Parts/_GenerateByKeyword", Model)
 
 <div class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
@@ -154,6 +152,21 @@
     const tabButtons = document.querySelectorAll("[data-count-status]");
     const searchInput = document.querySelector(".searchbar fieldset input");
     const tableRows = document.querySelectorAll("#container section table tbody tr");
+    const situationFilters = document.querySelectorAll(".filters .filter-situacoes input[type='checkbox']");
+    const roomFilters = document.querySelectorAll(".filters .filter-salas input[type='checkbox']");
+
+    function getSelectedSituations() {
+        return Array.from(situationFilters)
+            .filter(filter => filter.checked)
+            .map(filter => filter.id.toLowerCase());
+    }
+
+    function getSelectedRooms() {
+        return Array.from(roomFilters)
+            .filter(filter => filter.checked)
+            .map(filter => filter.id.toLowerCase());
+    }
+
 
     // Adiciona evento de clique nos botões de filtro
     Array.from(tabButtons).forEach(button => {
@@ -176,11 +189,14 @@
         element: row,
         text: row.innerText.trim().toLowerCase(),
         situacao: row.querySelector("td:last-child").innerText.trim().toLowerCase(),
+        sala: row.querySelector("td:nth-child(7)").innerText.trim().toLowerCase(),
         hasImportant: row.dataset.hasImportant === "true"
     }));
 
     function tabFilter(status, searchQuery = "") {
         let visibleCount = 0;
+        const selectedSituations = getSelectedSituations();
+        const selectedRooms = getSelectedRooms();
 
         tableData.forEach(data => {
             const matchesStatus =
@@ -188,9 +204,17 @@
                 data.situacao.includes(status) ||
                 (status === "importante" && data.hasImportant) ||
                 (status === "patrimonio" && data.text.includes("não consta"));
+
             const matchesSearch = searchQuery === "" || data.text.includes(searchQuery);
 
-            if (matchesStatus && matchesSearch) {
+            const matchesSituations = selectedSituations.length === 0 ||
+                selectedSituations.some(situation => data.situacao.includes(situation));
+
+            const matchesRooms = selectedRooms.length === 0 ||
+                selectedRooms.some(room => data.sala.includes(room));
+
+            // Exibe a linha apenas se todos os critérios forem atendidos
+            if (matchesStatus && matchesSearch && matchesSituations && matchesRooms) {
                 data.element.style.display = "table-row";
                 visibleCount++;
             } else {
@@ -201,6 +225,24 @@
         document.querySelector(`[data-count-status="${status}"]`).dataset.quantity = visibleCount;
         updateTabQuantities(searchQuery);
     }
+
+    // Atualiza os resultados ao alterar os filtros de situações
+    situationFilters.forEach(filter => {
+        filter.addEventListener("change", () => {
+            const currentFilter = document.querySelector("[data-count-status].current").dataset.countStatus;
+            const searchQuery = searchInput.value.trim().toLowerCase();
+            tabFilter(currentFilter, searchQuery);
+        });
+    });
+
+    // Atualiza os resultados ao alterar os filtros de salas
+    roomFilters.forEach(filter => {
+        filter.addEventListener("change", () => {
+            const currentFilter = document.querySelector("[data-count-status].current").dataset.countStatus;
+            const searchQuery = searchInput.value.trim().toLowerCase();
+            tabFilter(currentFilter, searchQuery);
+        });
+    });
 
     // Função para atualizar os atributos data-quantity de todas as abas
     function updateTabQuantities(searchQuery = "") {
@@ -230,6 +272,9 @@
 
     // Inicializa exibindo todos os equipamentos e atualizando as quantidades
     tabFilter("todos");
+</script>
+<script>
+
 </script>
 <script type="module">
     import { toast } from "/js/toast.js"

@@ -43,6 +43,13 @@ namespace SESOPtracker.Controllers
                 return NotFound();
             }
 
+            var equipamentos = _context.Equipamentos.Where(h => h.situacao == id).ToList();
+
+            if (equipamentos.Count() > 0)
+            {
+                TempData["DeleteSituacaoError"] = true;
+            }
+
             return View(situacao);
         }
 
