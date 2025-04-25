@@ -29,7 +29,7 @@
                         }
                         @if (historico.observacao != null)
                         {
-                            <span> @historico.observacao </span>
+                            <span> @Html.Raw(historico.observacao) </span>
                         }
                     </div>
                     <aside data-important="@historico.importante">

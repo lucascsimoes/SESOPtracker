@@ -110,6 +110,26 @@ namespace SESOPtracker.Controllers
                 return NotFound();
             }
 
+            var todosPatrimonios = _context.Equipamentos
+                .Select(e => e.patrimonio)
+                .ToList();
+
+            // Modifica as descrições do histórico para envolver patrimônios em <span>
+            foreach (var historico in equipamento.Historico)
+            {
+                foreach (var patrimonio in todosPatrimonios)
+                {
+                    if (historico.observacao != null && historico.observacao.Contains(patrimonio))
+                    {
+                        var link = Url.Action("Details", "Equipamentos", new { id = patrimonio });
+                        historico.observacao = historico.observacao.Replace(
+                            patrimonio,
+                            $"<a href='{link}' class='redirect-highlight'>{patrimonio}</a>"
+                        );
+                    }
+                }
+            }
+
             return View(equipamento);
         }
 
