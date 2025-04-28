@@ -21,6 +21,16 @@ main#container form .form-group {
         background: hsl(var(--input));
     }
 
+        main#container form .form-group fieldset:has(textarea:read-only) {
+            height: 100px;
+            margin-top: 20px;
+        }
+
+        main#container form .form-group fieldset textarea {
+            max-height: 80px;
+            resize: none;
+        }
+
 main#container form footer {
     display: flex;
     align-items: center;

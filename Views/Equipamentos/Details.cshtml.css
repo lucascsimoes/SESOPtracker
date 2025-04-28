@@ -45,15 +45,3 @@
         font-size: 13px;
         padding: 3px 10px;
     }
-
-.equipments-to-bind > svg {
-    display: flex;
-    justify-content: center;
-    transform: rotate(180deg);
-    margin-block: 10px;
-    margin-inline: auto;
-}
-
-    .selectize-input {
-        margin-block: 20px 0 !important;
-    }

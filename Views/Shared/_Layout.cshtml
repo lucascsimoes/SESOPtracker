@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="~/css/toast.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/filter-combination.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/selectize.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/data-table.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SESOPtracker.styles.css" asp-append-version="true" />
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -34,6 +35,9 @@
             crossorigin="anonymous"
             referrerpolicy="no-referrer"></script>
 
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" />
+
+    
     
 </head>
 <body>
@@ -85,12 +89,13 @@
         </aside>
     </header>
 
-    <main id="container" style="padding: @(headerTitle == "Equipamentos" ? "80px 160px 80px 80px" : "80px")">
+    <main id="container">
         @RenderBody()
     </main>
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

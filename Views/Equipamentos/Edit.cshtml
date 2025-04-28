@@ -89,13 +89,34 @@
 
         <input asp-for="dataCriacao" hidden />
         <footer>
-            <button type="button" class="btn-default check-values" data-bs-target="#editEquipment">
+            <button type="button" class="btn-default check-values">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
                     <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z" />
                 </svg>
             </button>
         </footer>
-
+        
+        <div class="modal fade" id="bindEquipment" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <h2> Substituição de equipamento </h2>
+                        <p> Você definiu que o equipamento está sendo substituído, informe por qual equipamento. </p>
+                        <div>
+                            <fiedlset>
+                                <select id="normalize" placeholder="Selecione um equipamento">
+                                    <option value="" disabled selected> Selecione um equipamento </option>
+                                </select>
+                            </fiedlset>
+                        </div>
+                    </div>
+                    <footer class="modal-footer">
+                        <button type="button" class="btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <input type="button" disabled value="Avançar" data-bs-toggle="modal" data-bs-target="#editEquipment" class="btn-default" />
+                    </footer>
+                </div>
+            </div>
+        </div>
         <div class="modal fade" id="editEquipment" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -110,9 +131,12 @@
                                 </fieldset>
                             </div>
                             <div class="form-group">
-                                <label id="observacao" name="observacao" class="control-label">Observação</label>
+                                <label id="observacaoManual" name="observacaoManual" class="control-label">Observação</label>
                                 <fieldset>
-                                    <input id="observacao" name="observacao" />
+                                    <input id="observacaoManual" name="observacaoManual" />
+                                </fieldset>
+                                <fieldset>
+                                    <textarea id="observacao" name="observacao" rows="4" readonly></textarea>
                                 </fieldset>
                             </div>
                             <div class="form-group">
@@ -137,6 +161,74 @@
 
 
 <script src="/js/create-sala.js"></script>
+<script>
+    const observacaoArrayValues = []
+
+    document.addEventListener("DOMContentLoaded", async () => {
+        let equipamentos = await $.ajax({
+            url: '@Url.Action("EquipmentsPatrimonio", "Equipamentos")',
+            method: "GET",
+            success: (response) => {
+                return response
+            },
+            error: (erro) => {
+                console.error(erro)
+            }
+        })
+
+        for (let i = 0; i < equipamentos.length; i++) {
+            if (equipamentos[i] != "@Model.patrimonio") {
+                $("#normalize").append(`<option value="${ equipamentos[i] }"> ${ equipamentos[i] } </option>`)
+            }
+        }
+
+        $('#normalize').selectize();
+
+
+        $("#normalize").on("change", function() {
+            if ($(".selectize-input .item").attr("data-value") != "") {
+                const normalizeValue = $(".selectize-input .item").attr("data-value")
+                $("[value=Avançar]").removeAttr("disabled")
+                observacaoArrayValues[0] = `Substituído pelo equipamento ${ normalizeValue }`
+            } else {
+                $("[value=Avançar]").attr("disabled", "disabled")
+                observacaoArrayValues[0] = ""
+            }
+
+            setObservacaoValue()
+        })
+
+
+
+        $("input[name=numeross]").on("keyup", function() {
+            const inputValue = $(this).val()
+
+            if (inputValue != "") {
+                observacaoArrayValues[1] = `Conforme OS ${ inputValue }`
+            } else {
+                observacaoArrayValues[1] = ""
+            }
+
+            setObservacaoValue()
+        })
+
+        $("input[name=observacaoManual]").on("keyup", function() {
+            const inputValue = $(this).val()
+            if (inputValue != "") {
+                observacaoArrayValues[2] = inputValue
+            } else {
+                observacaoArrayValues[2] = ""
+            }
+
+            setObservacaoValue()
+        })
+
+        function setObservacaoValue() {
+            const filtered = observacaoArrayValues.filter(Boolean)
+            $("[name=observacao]").val(filtered.join(", \n"))
+        }
+    })
+</script>
 <script>
     var equipamentoOriginal = @Html.Raw(modelJson);
 
@@ -187,7 +279,7 @@
         document.getElementById("descricao").value = descricao
     };
 
-    document.querySelector("[data-bs-target='#editEquipment']").addEventListener('click', () => setDescricao());
+    document.querySelector(".check-values").addEventListener('click', () => setDescricao());
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -230,7 +322,16 @@
                     }).get();
                     
                     if (!arraysAreEquals(newValues, rawValues)) {
-                        const modalElement = document.getElementById("editEquipment");
+                        let modalElement = undefined;
+                        const situacaoValue = $(".form-group [name=situacao]").val()
+                        const isSubstituido = $(`.form-group [name=situacao] option[value=${ situacaoValue }]`).text() == "Substituído"
+
+                        if (isSubstituido) {
+                            modalElement = document.getElementById("bindEquipment");
+                        } else {
+                            modalElement = document.getElementById("editEquipment");
+                        }
+
                         const modal = new bootstrap.Modal(modalElement);
                         modal.show();
 

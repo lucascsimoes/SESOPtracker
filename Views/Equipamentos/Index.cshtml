@@ -15,17 +15,17 @@
     <main>
         <header>
             <button data-count-status="todos" class="current" data-quantity="0"> Todos </button>
-            <button data-count-status="uso" data-quantity="0"> Em uso </button>
-            <button data-count-status="manutenção" data-quantity="0"> Em manutenção </button>
-            <button data-count-status="defeito" data-quantity="0"> Com defeito </button>
-            <button data-count-status="reserva" data-quantity="0"> Reserva </button>
-            <button data-count-status="substituído" data-quantity="0"> Substituído </button>
+            @* <button data-count-status="uso" data-quantity="0"> Em uso </button> *@
+            @* <button data-count-status="manutencao" data-quantity="0"> Em manutenção </button> *@
+            @* <button data-count-status="defeito" data-quantity="0"> Com defeito </button> *@
+            @* <button data-count-status="reserva" data-quantity="0"> Reserva </button> *@
+            @* <button data-count-status="substituido" data-quantity="0"> Substituído </button> *@
 
             <button data-count-status="importante" data-quantity="0"> Possui importante </button>
             <button data-count-status="patrimonio" data-quantity="0"> Sem patrimônio </button>
         </header>
         <div>
-            <table class="table">
+            <table class="table" id="myTable">
                 <thead>
                     <tr>
                         <th>
@@ -49,10 +49,10 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Sala)
                         </th>
-                        <th style="display: none" style-inline>
+                        <th>
                             @Html.DisplayNameFor(model => model.tag)
                         </th>
-                        <th style="display: none" style-inline>
+                        <th>
                             @Html.DisplayNameFor(model => model.Situacao)
                         </th>
                     </tr>
@@ -85,10 +85,10 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Sala.local)
                             </td>
-                            <td style="display: none">
+                            <td>
                                 @Html.DisplayFor(modelItem => item.tag)
                             </td>
-                            <td style="display: none">
+                            <td>
                                 @Html.DisplayFor(modelItem => item.Situacao.descricao)
                             </td>
                         </tr>
@@ -98,6 +98,9 @@
         </div>
     </main>
     <aside class="filters">
+        <button class="toggle-filters">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-left-icon lucide-chevrons-left"><path d="m11 17-5-5 5-5" /><path d="m18 17-5-5 5-5" /></svg>
+        </button>
         <div>
             <h4> Relatórios </h4>
             <button class="btn-secondary" data-bs-toggle="modal" data-bs-target="#equipmentListModal">
@@ -149,131 +152,122 @@
 </div>
 
 <script>
-    const tabButtons = document.querySelectorAll("[data-count-status]");
-    const searchInput = document.querySelector(".searchbar fieldset input");
-    const tableRows = document.querySelectorAll("#container section table tbody tr");
-    const situationFilters = document.querySelectorAll(".filters .filter-situacoes input[type='checkbox']");
-    const roomFilters = document.querySelectorAll(".filters .filter-salas input[type='checkbox']");
-
-    function getSelectedSituations() {
-        return Array.from(situationFilters)
-            .filter(filter => filter.checked)
-            .map(filter => filter.id.toLowerCase());
-    }
-
-    function getSelectedRooms() {
-        return Array.from(roomFilters)
-            .filter(filter => filter.checked)
-            .map(filter => filter.id.toLowerCase());
-    }
-
-
-    // Adiciona evento de clique nos botões de filtro
-    Array.from(tabButtons).forEach(button => {
-        button.addEventListener("click", function () {
-            $("[data-count-status]").removeClass("current");
-            this.classList.add("current");
-            const currentSearch = searchInput.value.trim().toLowerCase(); // Pega o valor atual da barra de pesquisa
-            tabFilter(this.dataset.countStatus, currentSearch);
-        });
-    });
-
-    // Adiciona evento de digitação na barra de pesquisa
-    searchInput.addEventListener("keyup", () => {
-        const currentFilter = document.querySelector("[data-count-status].current").dataset.countStatus;
-        const searchQuery = searchInput.value.trim().toLowerCase();
-        tabFilter(currentFilter, searchQuery);
-    });
-
-    const tableData = Array.from(tableRows).map(row => ({
-        element: row,
-        text: row.innerText.trim().toLowerCase(),
-        situacao: row.querySelector("td:last-child").innerText.trim().toLowerCase(),
-        sala: row.querySelector("td:nth-child(7)").innerText.trim().toLowerCase(),
-        hasImportant: row.dataset.hasImportant === "true"
-    }));
-
-    function tabFilter(status, searchQuery = "") {
-        let visibleCount = 0;
-        const selectedSituations = getSelectedSituations();
-        const selectedRooms = getSelectedRooms();
-
-        tableData.forEach(data => {
-            const matchesStatus =
-                status === "todos" ||
-                data.situacao.includes(status) ||
-                (status === "importante" && data.hasImportant) ||
-                (status === "patrimonio" && data.text.includes("não consta"));
-
-            const matchesSearch = searchQuery === "" || data.text.includes(searchQuery);
-
-            const matchesSituations = selectedSituations.length === 0 ||
-                selectedSituations.some(situation => data.situacao.includes(situation));
-
-            const matchesRooms = selectedRooms.length === 0 ||
-                selectedRooms.some(room => data.sala.includes(room));
-
-            // Exibe a linha apenas se todos os critérios forem atendidos
-            if (matchesStatus && matchesSearch && matchesSituations && matchesRooms) {
-                data.element.style.display = "table-row";
-                visibleCount++;
+    document.addEventListener("DOMContentLoaded", function() {
+        $(".toggle-filters").on("click", function() {
+            if ($(this).closest(".filters").hasClass("show")) {
+                $(this).closest(".filters").removeClass("show")
             } else {
-                data.element.style.display = "none";
+                $(this).closest(".filters").addClass("show")
             }
-        });
-
-        document.querySelector(`[data-count-status="${status}"]`).dataset.quantity = visibleCount;
-        updateTabQuantities(searchQuery);
-    }
-
-    // Atualiza os resultados ao alterar os filtros de situações
-    situationFilters.forEach(filter => {
-        filter.addEventListener("change", () => {
-            const currentFilter = document.querySelector("[data-count-status].current").dataset.countStatus;
-            const searchQuery = searchInput.value.trim().toLowerCase();
-            tabFilter(currentFilter, searchQuery);
-        });
-    });
-
-    // Atualiza os resultados ao alterar os filtros de salas
-    roomFilters.forEach(filter => {
-        filter.addEventListener("change", () => {
-            const currentFilter = document.querySelector("[data-count-status].current").dataset.countStatus;
-            const searchQuery = searchInput.value.trim().toLowerCase();
-            tabFilter(currentFilter, searchQuery);
-        });
-    });
-
-    // Função para atualizar os atributos data-quantity de todas as abas
-    function updateTabQuantities(searchQuery = "") {
-        Array.from(tabButtons).forEach(button => {
-            const status = button.dataset.countStatus;
-            let count = 0;
-
-            tableRows.forEach(row => {
-                const situacao = row.querySelector("td:last-child").innerText.trim().toLowerCase();
-                const rowText = row.innerText.trim().toLowerCase();
-
-                const matchesStatus =
-                    status === "todos" ||
-                    situacao.includes(status) ||
-                    (status === "importante" && row.dataset.hasImportant === "true") ||
-                    (status === "patrimonio" && rowText.includes("não consta"));
-                const matchesSearch = searchQuery === "" || rowText.includes(searchQuery);
-
-                if (matchesStatus && matchesSearch) {
-                    count++;
-                }
-            });
-
-            button.dataset.quantity = count; // Atualiza o atributo data-quantity
-        });
-    }
-
-    // Inicializa exibindo todos os equipamentos e atualizando as quantidades
-    tabFilter("todos");
+        })
+    })
 </script>
 <script>
+        $(document).ready(function () {
+        const tabButtons = document.querySelectorAll("[data-count-status]");
+        const searchInput = document.querySelector(".searchbar fieldset input");
+        const situationFilters = document.querySelectorAll(".filters .filter-situacoes input[type='checkbox']");
+        const roomFilters = document.querySelectorAll(".filters .filter-salas input[type='checkbox']");
+
+        // Inicializa o DataTable
+        let table = $('#myTable').DataTable({
+            info: false,
+            pageLength: 50,
+            lengthChange: false,
+            columnDefs: [
+                { targets: [7, 8], visible: false } // Oculta as colunas Tag e Situação
+            ]
+        });
+
+        // Calcula os valores das abas com base nos dados originais da tabela
+        function calculateTabQuantities() {
+            const allData = table.rows().data(); // Obtém todos os dados da tabela
+            const counts = {
+                todos: 0,
+                importante: 0,
+                patrimonio: 0
+            };
+
+            const teste = table.rows().every(function () {
+                const row = this.node();
+                const data = this.data()
+                data.push(row.dataset.hasImportant === "true" ? "true" : "false")
+                return data
+            });
+
+            console.log(allData)
+
+            // Conta os itens com base nos critérios
+            allData.each(function (row) {
+                const situacao = row[8].toLowerCase(); // Coluna de Situação
+                const textoCompleto = row.join(" ").toLowerCase(); // Texto completo da linha
+
+                counts.todos++;
+                if (textoCompleto.includes("não consta")) counts.patrimonio++;
+                if (row[7] === "true") counts.importante++; // Coluna "importante"
+            });
+
+            // Atualiza os atributos data-quantity das abas
+            tabButtons.forEach(button => {
+                const status = button.dataset.countStatus;
+                button.dataset.quantity = counts[status] || 0;
+            });
+        }
+
+        // Aplica os filtros e redesenha a tabela
+        function applyFilters() {
+            table.draw(); // Redesenha a tabela com os filtros aplicados
+        }
+
+        // Eventos de busca e filtros
+        searchInput.addEventListener("keyup", function () {
+            table.search(this.value).draw();
+            applyFilters(); // Aplica os filtros após a busca
+        });
+
+        situationFilters.forEach(filter => {
+            filter.addEventListener("change", applyFilters);
+        });
+
+        roomFilters.forEach(filter => {
+            filter.addEventListener("change", applyFilters);
+        });
+
+        // Evento de clique nas abas
+        tabButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                tabButtons.forEach(btn => btn.classList.remove("current"));
+                this.classList.add("current");
+
+                const status = this.dataset.countStatus;
+
+                // Remove todos os filtros antigos
+                $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(function (filter) {
+                    return filter.name !== "tabFilter";
+                });
+
+                // Adiciona o novo filtro para a aba selecionada
+                $.fn.dataTable.ext.search.push(function tabFilter(settings, data, dataIndex) {
+                    const situacao = data[8].toLowerCase(); // Coluna de Situação
+                    const textoCompleto = data.join(" ").toLowerCase(); // Texto completo da linha
+
+                    const matchesStatus =
+                        status === "todos" ||
+                        (status === "importante" && data[7] === "true") ||
+                        (status === "patrimonio" && textoCompleto.includes("nao consta"));
+
+                    return matchesStatus;
+                });
+
+                table.draw(); // Redesenha a tabela com os filtros aplicados
+            });
+        });
+
+        // Inicializa as abas e filtros
+        calculateTabQuantities(); // Calcula os valores das abas apenas uma vez
+        applyFilters();
+    });
+
 
 </script>
 <script type="module">
@@ -293,4 +287,7 @@
             return;
         }
     })
+</script>
+<script>
+    
 </script>

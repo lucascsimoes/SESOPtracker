@@ -4,7 +4,7 @@
 
     table > thead > tr {
         position: sticky;
-        top: 82px;
+        top: 79px;
         z-index: 2;
         height: 40px;
         vertical-align: middle;

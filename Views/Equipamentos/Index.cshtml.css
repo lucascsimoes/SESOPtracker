@@ -1,83 +1,119 @@
-﻿main#container {
-    padding: 0 !important;
-    padding-right: 160px;
+﻿
+main#container > section > main > div {
+    padding: 20px;
+    background: hsl(var(--background));
+    border: 1px solid hsl(var(--border));
 }
 
-main#container > section {
-    display: grid;
-    grid-template-areas:
-        'header header'
-        'main aside';
+main#container > section > main > header {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 3px;
 }
 
-    main#container > section > main {
-        grid-area: main;
+    main#container > section > main > header > button {
+        position: relative;
+        padding: 10px 50px 10px 20px;
+        border: 1px solid hsl(var(--border));
+        background: hsl(var(--background));
+        font-size: 13px;
+        white-space: nowrap;
+        transition: background .3s;
     }
 
-        main#container > section > main > div {
-            padding: 20px;
-            background: hsl(var(--background));
-            border: 1px solid hsl(var(--border));
+        main#container > section > main > header > button:nth-last-child(2) {
+            margin-left: auto;
         }
 
-        main#container > section > main > header {
-            grid-area: header;
+        main#container > section > main > header > button.current {
+            color: var(--primary);
+            pointer-events: none;
+            user-select: none;
+            font-weight: bold;
+        }
+
+        main#container > section > main > header > button:hover {
+            background: hsl(var(--accent));
+            color: hsl(var(--accent-foreground));
+            transition: background .3s;
+        }
+
+        main#container > section > main > header > button::after {
             display: flex;
-            gap: 3px;
-            margin-bottom: 3px;
+            align-items: center;
+            justify-content: center;
+            content: attr(data-quantity);
+            position: absolute;
+            right: 10px;
+            top: 0;
+            height: 100%;
+            font-size: 11px;
         }
 
-            main#container > section > main > header > button {
-                position: relative;
-                padding: 10px 50px 10px 20px;
-                border: 1px solid hsl(var(--border));
-                background: hsl(var(--background));
-                font-size: 13px;
-                white-space: nowrap;
+.filters {
+    position: fixed;
+    right: 0;
+    top: 82px;
+    width: 250px;
+    height: calc(100vh - 81px);
+    background: hsl(var(--background));
+    border-left: 1px solid hsl(var(--border));
+    padding: 20px;
+    transform: translateX(235px);
+    transition: transform .3s;
+    z-index: 1;
+    /*        overflow-x: auto;*/
+}
+
+    .filters.show {
+        transform: translateX(0);
+        transition: transform .3s;
+    }
+
+
+        .filters.show > .toggle-filters > svg {
+            transform: rotate(180deg);
+            transition: transform .3s;
+        }
+
+        .filters > .toggle-filters {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 25px;
+            height: 25px;
+            position: absolute;
+            top: 16px;
+            left: -10px;
+            background: hsl(var(--background));
+            border: none;
+            border-left: 1px solid hsl(var(--border));
+            border-radius: 50%;
+            transition: background .3s;
+        }
+
+            .filters > .toggle-filters:hover {
+                background: hsl(var(--accent));
+                color: hsl(var(--accent-foreground));
                 transition: background .3s;
             }
 
-                main#container > section > main > header > button:nth-last-child(2) {
-                    margin-left: auto;
-                }
+            .filters > .toggle-filters > svg {
+                width: 16px;
+                transform: rotate(0deg);
+                transition: transform .3s;
+            }
 
-                main#container > section > main > header > button.current {
-                    color: var(--primary);
-                    pointer-events: none;
-                    user-select: none;
-                    font-weight: bold;
-                }
-
-                main#container > section > main > header > button:hover {
-                    background: hsl(var(--accent));
-                    color: hsl(var(--accent-foreground));
-                    transition: background .3s;
-                }
-
-                main#container > section > main > header > button::after {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    content: attr(data-quantity);
-                    position: absolute;
-                    right: 10px;
-                    top: 0;
-                    height: 100%;
-                    font-size: 11px;
-                }
-
-    .filters {
-        position: fixed;
-        right: 0;
-        top: 82px;
-        grid-area: aside;
-        width: 250px;
-        height: calc(100vh - 81px);
-        background: hsl(var(--background));
-        border-left: 1px solid hsl(var(--border));
-        padding: 20px;
-        overflow: auto;
-    }
+        .filters:not(.show):has(input[type=checkbox]:checked) .toggle-filters::after {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: 0;
+            background: var(--primary);
+            border-radius: 50%;
+            width: 9px;
+            height: 9px;
+        }
 
         .filters h4 {
             font-size: 16px;
