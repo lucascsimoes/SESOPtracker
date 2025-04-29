@@ -6,6 +6,14 @@
     display: none !important;
 }
 
+.dt-info {
+    font-size: 13px;
+}
+
+/*.dt-type-numeric {
+    text-align: left !important;
+}*/
+
 .dt-paging-button {
     width: 45px;
     height: 45px;

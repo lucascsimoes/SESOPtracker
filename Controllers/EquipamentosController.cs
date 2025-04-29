@@ -146,7 +146,7 @@ namespace SESOPtracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("patrimonio,item,nome,subCategoria,categoria,setor,dataCriacao,situacao,sala")] Equipamento equipamento,
+        public async Task<IActionResult> Create([Bind("patrimonio,item,nome,subCategoria,categoria,setor,dataCriacao,situacao,sala,tag")] Equipamento equipamento,
             [FromForm] string multiple, IFormFile file)
         {
             if (file != null && file.Length > 0) {
@@ -272,7 +272,7 @@ namespace SESOPtracker.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, 
-            [Bind("patrimonio,item,nome,subCategoria,categoria,setor,dataCriacao,situacao,sala")] Equipamento equipamento,
+            [Bind("patrimonio,item,nome,subCategoria,categoria,setor,dataCriacao,situacao,sala,tag")] Equipamento equipamento,
             [FromForm] string dataAlteracao,
             [FromForm] string descricao,
             [FromForm] string observacao,

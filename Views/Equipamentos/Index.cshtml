@@ -12,14 +12,9 @@
 }
 
 <section>
-    <main>
+    <main class="loading">
         <header>
             <button data-count-status="todos" class="current" data-quantity="0"> Todos </button>
-            @* <button data-count-status="uso" data-quantity="0"> Em uso </button> *@
-            @* <button data-count-status="manutencao" data-quantity="0"> Em manutenção </button> *@
-            @* <button data-count-status="defeito" data-quantity="0"> Com defeito </button> *@
-            @* <button data-count-status="reserva" data-quantity="0"> Reserva </button> *@
-            @* <button data-count-status="substituido" data-quantity="0"> Substituído </button> *@
 
             <button data-count-status="importante" data-quantity="0"> Possui importante </button>
             <button data-count-status="patrimonio" data-quantity="0"> Sem patrimônio </button>
@@ -163,64 +158,111 @@
     })
 </script>
 <script>
-        $(document).ready(function () {
-        const tabButtons = document.querySelectorAll("[data-count-status]");
+    $(document).ready(function () {
         const searchInput = document.querySelector(".searchbar fieldset input");
         const situationFilters = document.querySelectorAll(".filters .filter-situacoes input[type='checkbox']");
         const roomFilters = document.querySelectorAll(".filters .filter-salas input[type='checkbox']");
+        const tabButtons = document.querySelectorAll("[data-count-status]");
+
+        // Função para normalizar strings (remover acentos)
+        function normalizeString(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        }
 
         // Inicializa o DataTable
         let table = $('#myTable').DataTable({
-            info: false,
             pageLength: 50,
             lengthChange: false,
+            typeDetect: false,
+            order: [[0, null]],
             columnDefs: [
                 { targets: [7, 8], visible: false } // Oculta as colunas Tag e Situação
-            ]
+            ],
+            language: {
+                emptyTable: 'Nenhum equipamento cadastrado',
+                zeroRecords: 'Nenhum equipamento encontrado',
+                info: '_TOTAL_ _ENTRIES_',
+                entries: {
+                    _: 'equipamentos listados',
+                    1: 'equipamento listado'
+                },
+                infoFiltered: ""
+            },
+            initComplete: () => {
+                $("#myTable").closest("main").removeClass("loading");
+            }
         });
 
-        // Calcula os valores das abas com base nos dados originais da tabela
-        function calculateTabQuantities() {
+        // Adiciona um filtro personalizado ao DataTables
+        $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+            const situacao = normalizeString(data[8]); // Coluna de Situação
+            const sala = normalizeString(data[6]); // Coluna de Sala
+            const textoCompleto = normalizeString(data.join(" ")); // Texto completo da linha
+
+            // Recupera o atributo `data-has-important` da tag <tr>
+            const rowNode = table.row(dataIndex).node();
+            const isImportant = rowNode ? rowNode.getAttribute("data-has-important") === "true" : false;
+
+            const selectedSituations = Array.from(situationFilters)
+                .filter(filter => filter.checked)
+                .map(filter => normalizeString(filter.id));
+
+            const selectedRooms = Array.from(roomFilters)
+                .filter(filter => filter.checked)
+                .map(filter => normalizeString(filter.id));
+
+            const matchesSituations = selectedSituations.length === 0 || selectedSituations.includes(situacao);
+            const matchesRooms = selectedRooms.length === 0 || selectedRooms.includes(sala);
+
+            // Verifica se a aba "Importante" ou "Patrimônio" está ativa
+            const activeTab = document.querySelector("[data-count-status].current")?.dataset.countStatus || "todos";
+            const matchesTab =
+                activeTab === "todos" ||
+                (activeTab === "importante" && isImportant) ||
+                (activeTab === "patrimonio" && textoCompleto.includes("nao consta"));
+
+            return matchesSituations && matchesRooms && matchesTab;
+        });
+
+        // Atualiza as quantidades das abas com base nos dados originais da tabela
+        function updateTabQuantities() {
             const allData = table.rows().data(); // Obtém todos os dados da tabela
-            const counts = {
+            let counts = {
                 todos: 0,
                 importante: 0,
                 patrimonio: 0
             };
 
-            const teste = table.rows().every(function () {
-                const row = this.node();
-                const data = this.data()
-                data.push(row.dataset.hasImportant === "true" ? "true" : "false")
-                return data
-            });
-
-            console.log(allData)
-
             // Conta os itens com base nos critérios
-            allData.each(function (row) {
-                const situacao = row[8].toLowerCase(); // Coluna de Situação
-                const textoCompleto = row.join(" ").toLowerCase(); // Texto completo da linha
+            allData.each(function (row, dataIndex) {
+                const textoCompleto = normalizeString(row.join(" ")); // Texto completo da linha
+
+                // Recupera o atributo `data-has-important` da tag <tr>
+                const rowNode = table.row(dataIndex).node();
+                const isImportant = rowNode ? rowNode.getAttribute("data-has-important") === "true" : false;
 
                 counts.todos++;
-                if (textoCompleto.includes("não consta")) counts.patrimonio++;
-                if (row[7] === "true") counts.importante++; // Coluna "importante"
+                if (textoCompleto.includes("nao consta")) counts.patrimonio++;
+                if (isImportant) counts.importante++;
             });
 
             // Atualiza os atributos data-quantity das abas
             tabButtons.forEach(button => {
                 const status = button.dataset.countStatus;
-                button.dataset.quantity = counts[status] || 0;
+                if (counts[status] !== undefined) {
+                    button.dataset.quantity = counts[status];
+                }
             });
         }
 
         // Aplica os filtros e redesenha a tabela
         function applyFilters() {
             table.draw(); // Redesenha a tabela com os filtros aplicados
+            updateTabQuantities(); // Atualiza as quantidades das abas
         }
 
         // Eventos de busca e filtros
-        searchInput.addEventListener("keyup", function () {
+        searchInput?.addEventListener("keyup", function () {
             table.search(this.value).draw();
             applyFilters(); // Aplica os filtros após a busca
         });
@@ -238,37 +280,14 @@
             button.addEventListener("click", function () {
                 tabButtons.forEach(btn => btn.classList.remove("current"));
                 this.classList.add("current");
-
-                const status = this.dataset.countStatus;
-
-                // Remove todos os filtros antigos
-                $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(function (filter) {
-                    return filter.name !== "tabFilter";
-                });
-
-                // Adiciona o novo filtro para a aba selecionada
-                $.fn.dataTable.ext.search.push(function tabFilter(settings, data, dataIndex) {
-                    const situacao = data[8].toLowerCase(); // Coluna de Situação
-                    const textoCompleto = data.join(" ").toLowerCase(); // Texto completo da linha
-
-                    const matchesStatus =
-                        status === "todos" ||
-                        (status === "importante" && data[7] === "true") ||
-                        (status === "patrimonio" && textoCompleto.includes("nao consta"));
-
-                    return matchesStatus;
-                });
-
-                table.draw(); // Redesenha a tabela com os filtros aplicados
+                applyFilters(); // Aplica os filtros ao clicar em uma aba
             });
         });
 
-        // Inicializa as abas e filtros
-        calculateTabQuantities(); // Calcula os valores das abas apenas uma vez
+        // Inicializa os filtros e atualiza as quantidades
+        updateTabQuantities();
         applyFilters();
     });
-
-
 </script>
 <script type="module">
     import { toast } from "/js/toast.js"
@@ -287,7 +306,4 @@
             return;
         }
     })
-</script>
-<script>
-    
 </script>
