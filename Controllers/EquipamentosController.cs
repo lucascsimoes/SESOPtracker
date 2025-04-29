@@ -447,6 +447,7 @@ namespace SESOPtracker.Controllers
                             categoria = worksheet.Cells[row, 6].Value?.ToString(),
                             situacao = situacao!.situacaoId,
                             sala = sala!.salaId,
+                            tag = null,
                             dataCriacao = DateTime.Now.ToString("dd/MM/yyyy HH:mm")
                         };
 

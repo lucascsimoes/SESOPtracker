@@ -138,11 +138,9 @@
 @await Html.PartialAsync("Parts/_GenerateByEquipmentList", Model)
 @await Html.PartialAsync("Parts/_GenerateByKeyword", Model)
 
-<div class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+<div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
-        <div class="toast-body">
-            Equipamento deletado com sucesso!
-        </div>
+        <div class="toast-body"></div>
     </div>
 </div>
 
@@ -176,7 +174,7 @@
             typeDetect: false,
             order: [[0, null]],
             columnDefs: [
-                { targets: [7, 8], visible: false } // Oculta as colunas Tag e Situação
+                { targets: [7, 8], visible: false }
             ],
             language: {
                 emptyTable: 'Nenhum equipamento cadastrado',
@@ -189,7 +187,7 @@
                 infoFiltered: ""
             },
             initComplete: () => {
-                $("#myTable").closest("main").removeClass("loading");
+                $("#myTable").closest(".loading").removeClass("loading");
             }
         });
 

@@ -17,7 +17,7 @@
 
     .andOr fieldset {
         background: none;
-        max-width: 70px;
+        max-width: max-content;
     }
 
         .andOr fieldset::after {
