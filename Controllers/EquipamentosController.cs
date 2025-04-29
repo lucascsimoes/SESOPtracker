@@ -17,6 +17,8 @@ using CsvHelper.Configuration;
 using Microsoft.SqlServer.Server;
 using OfficeOpenXml;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Oracle.ManagedDataAccess.Client;
+using SCCWEB.Data;
 
 namespace SESOPtracker.Controllers
 {
@@ -30,61 +32,19 @@ namespace SESOPtracker.Controllers
         }
 
         // GET: Equipamentos
-        public async Task<IActionResult> Index(string viewBy) {
-            if (viewBy != null) {
-                viewBy = viewBy.Split("?")[0];
-            } else {
-                viewBy = "";
-            }
+        public async Task<IActionResult> Index(string viewBy)
+        {
 
             ViewData["StatusList"] = new SelectList(_context.Situacoes, "situacaoId", "descricao");
             ViewData["SalasList"] = new SelectList(_context.Salas, "salaId", "local");
 
 
             var equipamentos = from e in _context.Equipamentos.Include(e => e.Sala).Include(e => e.Situacao).Include(e => e.Historico)
-                                   select e;
+                               select e;
 
-            var equipamentosList = await equipamentos.ToListAsync();
+            //var equipamentosList = await equipamentos.ToListAsync();
 
-            switch (viewBy) {
-                case "Categoria":
-                    equipamentosList = equipamentosList.OrderBy(e => e.categoria).ToList();
-                    break;
-                case "Situacao":
-                    equipamentosList = equipamentosList.OrderBy(e => e.Situacao.descricao).ToList();
-                    break;
-                case "Sala":
-                    equipamentosList = equipamentosList.OrderBy(e => e.Sala.local).ToList();
-                    break;
-                case "Setor":
-                    equipamentosList = equipamentosList.OrderBy(e => e.setor).ToList();
-                    break;
-                default:
-                    equipamentosList = equipamentosList.OrderByDescending(e =>
-                    {
-                        if (long.TryParse(e.patrimonio, out long patrimonioNum))
-                        {
-                            return patrimonioNum;
-                        }
-                        return long.MinValue;
-                    }).ToList();
-                    break;
-            }
-
-            var equipamentosPorCategoria = equipamentosList.GroupBy(e => e.categoria).ToList();
-            ViewData["EquipamentosPorCategoria"] = equipamentosPorCategoria;
-
-            var equipamentosPorSituacao = equipamentosList.GroupBy(e => e.Situacao.descricao).ToList();
-            ViewData["EquipamentosPorSituacao"] = equipamentosPorSituacao;
-
-            var equipamentosPorSala = equipamentosList.GroupBy(e => e.Sala.local).ToList();
-            ViewData["EquipamentosPorSala"] = equipamentosPorSala;
-
-            var equipamentosPorSetor = equipamentosList.GroupBy(e => e.setor).ToList();
-            ViewData["EquipamentosPorSetor"] = equipamentosPorSetor;
-
-            ViewData["ViewBy"] = viewBy;
-            return View(equipamentosList);
+            return View(equipamentos);
         }
 
 

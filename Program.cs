@@ -14,10 +14,8 @@ builder.Services.AddControllersWithViews()
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-builder.Services.AddDbContext<ApplicationDbContext>(options => {
-    var connectionString = builder.Configuration.GetConnectionString("localDb");
-    options.UseSqlite(connectionString);
-});
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                            options.UseOracle(builder.Configuration.GetConnectionString("DataBaseHml")));
 
 var app = builder.Build();
 

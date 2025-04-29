@@ -29,6 +29,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+    <PackageReference Include="Oracle.EntityFrameworkCore" Version="9.23.80" />
+    <PackageReference Include="Oracle.ManagedDataAccess" Version="23.8.0" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.8.0" />
+    <PackageReference Include="Oracle.ManagedDataAccess.EntityFramework" Version="23.8.0" />
     <PackageReference Include="Sysinfocus.AspNetCore.Components" Version="0.0.2.9" />
   </ItemGroup>
 

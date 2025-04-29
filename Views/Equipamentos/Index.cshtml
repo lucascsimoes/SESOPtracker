@@ -11,6 +11,12 @@
     var addedEquipment = TempData["AddEquipment"] as bool? ?? false;
 }
 
+@if (Model == null)
+{
+    <p> ERRO </p>
+    return;
+}
+
 <section>
     <main class="loading">
         <header>

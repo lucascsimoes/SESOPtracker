@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Oracle.ManagedDataAccess.Client;
+using SCCWEB.Data;
 using SESOPtracker.Data;
 using SESOPtracker.Models.Entities;
 
@@ -20,9 +22,43 @@ namespace SESOPtracker.Controllers
         }
 
         // GET: Salas
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Salas.ToListAsync());
+            List<Sala> salas = new List<Sala>();
+
+            try
+            {
+                OracleConnection conn = Conexao.GetConexao();
+                string sql = "SELECT * FROM LUCAS_TRACKER_SALAS";
+                OracleCommand cmd = new OracleCommand(sql, conn);
+                conn.Open();
+                OracleDataReader rd = cmd.ExecuteReader();
+
+                while (rd.Read())
+                {
+                    Sala sala = new Sala()
+                    {
+                        salaId = Convert.ToInt32(rd["salaId"]),
+                        local = rd["lugar"].ToString(),
+                        descricao = rd["descricao"].ToString()
+                    };
+
+                    salas.Add(sala);
+                }
+
+                rd.Close();
+
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro de SQL: " + ex.Message);
+            }
+
+            return View(salas);
         }
 
         // GET: Salas/Details/5
