@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SESOPtracker.Models.Entities {
     public class Situacao {
         [Key]
+        [Column("SITUACAOID")]
         public int situacaoId { get; set; }
 
         [Display(Name = "Descrição")]

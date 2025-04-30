@@ -38,7 +38,8 @@ namespace SESOPtracker.Controllers
                     e.subCategoria,
                     e.categoria,
                     Situacao = e.Situacao != null ? e.Situacao.descricao : null,
-                    Sala = e.Sala != null ? e.Sala.local : null
+                    Sala = e.Sala != null ? e.Sala.local : null,
+                    e.tag
                 })
                 .ToList();
 

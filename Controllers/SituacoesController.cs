@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Oracle.ManagedDataAccess.Client;
+using SCCWEB.Data;
 using SESOPtracker.Data;
 using SESOPtracker.Models.Entities;
 
@@ -17,6 +19,38 @@ namespace SESOPtracker.Controllers
         public SituacoesController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        private bool SituacaoExists(string id)
+        {
+            bool rec = false;
+
+            try
+            {
+                OracleConnection conn = Conexao.GetConexao();
+                string sql = $"select * from LUCAS_TRACKER_SITUACOES where descricao like '{id}' ";
+                OracleCommand cmd = new OracleCommand(sql, conn);
+                conn.Open();
+                OracleDataReader rd = cmd.ExecuteReader();
+
+                rd.Read();
+
+                if (rd.HasRows)
+                {
+                    rec = true;
+                }
+                rd.Close();
+
+                if (conn != null)
+                    conn.Close();
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro de SQL: " + ex.Message;
+                throw new Exception("Erro de SQL: " + ex.Message);
+            }
+
+            return rec;
         }
 
         // GET: Situacoes
@@ -66,7 +100,7 @@ namespace SESOPtracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("situacaoId,descricao,cor")] Situacao situacao)
         {
-            if (_context.Situacoes.Any(s => s.descricao == situacao.descricao)) {
+            if (SituacaoExists(situacao.descricao)) {
                 ModelState.AddModelError("descricao", "Essa situação já foi cadastrada");
             }
 
@@ -117,13 +151,13 @@ namespace SESOPtracker.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SituacaoExists(situacao.situacaoId))
-                    {
-                        return NotFound();
-                    }
-                    else
+                    if (SituacaoExists(situacao.descricao))
                     {
                         throw;
+                    }
+                    else
+                        return NotFound();
+                    {
                     }
                 }
 
@@ -169,11 +203,6 @@ namespace SESOPtracker.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool SituacaoExists(int id)
-        {
-            return _context.Situacoes.Any(e => e.situacaoId == id);
         }
     }
 }

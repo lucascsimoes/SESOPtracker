@@ -21,6 +21,38 @@ namespace SESOPtracker.Controllers
             _context = context;
         }
 
+        private bool SalaExists(string id)
+        {
+            bool rec = false;
+
+            try
+            {
+                OracleConnection conn = Conexao.GetConexao();
+                string sql = $"select * from LUCAS_TRACKER_SALAS where lugar like '{id}' ";
+                OracleCommand cmd = new OracleCommand(sql, conn);
+                conn.Open();
+                OracleDataReader rd = cmd.ExecuteReader();
+
+                rd.Read();
+
+                if (rd.HasRows)
+                {
+                    rec = true;
+                }
+                rd.Close();
+
+                if (conn != null)
+                    conn.Close();
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro de SQL: " + ex.Message;
+                throw new Exception("Erro de SQL: " + ex.Message);
+            }
+
+            return rec;
+        }
+
         // GET: Salas
         public IActionResult Index()
         {
@@ -102,14 +134,14 @@ namespace SESOPtracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("salaId,local,descricao")] Sala sala)
         {
-            if (_context.Salas.Any(s => s.local == sala.local)) {
+            if (SalaExists(sala.local)) {
                 ModelState.AddModelError("local", "Essa sala já foi cadastrada");
             }
 
-            sala.local = sala.local.ToUpper();
-
             if (ModelState.IsValid)
             {
+                sala.local = sala.local.ToUpper();
+
                 _context.Add(sala);
                 await _context.SaveChangesAsync();
 
@@ -157,7 +189,7 @@ namespace SESOPtracker.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SalaExists(sala.salaId))
+                    if (SalaExists(sala.local))
                     {
                         return NotFound();
                     }
@@ -205,11 +237,6 @@ namespace SESOPtracker.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool SalaExists(int id)
-        {
-            return _context.Salas.Any(e => e.salaId == id);
         }
     }
 }

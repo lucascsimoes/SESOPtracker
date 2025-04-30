@@ -31,6 +31,17 @@ namespace SESOPtracker.Controllers
             _context = context;
         }
 
+        private async Task<bool> EquipamentoExists(string id)
+        {
+            var equipamento = await _context.Equipamentos.FindAsync(id);
+            if (equipamento != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         // GET: Equipamentos
         public async Task<IActionResult> Index(string viewBy)
         {
@@ -38,11 +49,10 @@ namespace SESOPtracker.Controllers
             ViewData["StatusList"] = new SelectList(_context.Situacoes, "situacaoId", "descricao");
             ViewData["SalasList"] = new SelectList(_context.Salas, "salaId", "local");
 
-
-            var equipamentos = from e in _context.Equipamentos.Include(e => e.Sala).Include(e => e.Situacao).Include(e => e.Historico)
+            var equipamentos = from e in _context.Equipamentos
+                               .Include(e => e.Sala)
+                               .Include(e => e.Situacao)
                                select e;
-
-            //var equipamentosList = await equipamentos.ToListAsync();
 
             return View(equipamentos);
         }
@@ -115,27 +125,30 @@ namespace SESOPtracker.Controllers
                 ModelState.Remove("file");
             }
 
-            if (_context.Equipamentos.Any(s => s.patrimonio == equipamento.patrimonio)) {
-                ModelState.AddModelError("patrimonio", "Esse equipamento já foi cadastrado");
-            } else {
-                ModelState.Remove("patrimonio");
-            }
-
-            if (string.IsNullOrEmpty(equipamento.patrimonio)) {
+            if (string.IsNullOrEmpty(equipamento.patrimonio))
+            {
                 var lastEquipamento = await _context.Equipamentos
                     .Where(e => e.patrimonio.StartsWith("Não consta"))
                     .OrderByDescending(e => e.patrimonio)
                     .FirstOrDefaultAsync();
 
                 int nextNumber = 1;
-                if (lastEquipamento != null) {
+                if (lastEquipamento != null)
+                {
                     var lastNumberStr = lastEquipamento.patrimonio.Replace("Não consta [", "").Replace("]", "");
-                    if (int.TryParse(lastNumberStr, out int lastNumber)) {
+                    if (int.TryParse(lastNumberStr, out int lastNumber))
+                    {
                         nextNumber = lastNumber + 1;
                     }
                 }
 
                 equipamento.patrimonio = $"Não consta [{nextNumber:D3}]";
+            }
+
+            if (await EquipamentoExists(equipamento.patrimonio)) {
+                ModelState.AddModelError("patrimonio", "Esse equipamento já foi cadastrado");
+            } else {
+                ModelState.Remove("patrimonio");
             }
 
             if (equipamento.setor != null) {
@@ -167,18 +180,6 @@ namespace SESOPtracker.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(equipamento);
-                await _context.SaveChangesAsync();
-
-                var historico = new Historico {
-                    patrimonio = equipamento.patrimonio,
-                    dataAlteracao = DateTime.Now.ToString("dd/MM/yyyy HH:mm"),
-                    situacaoAtual = equipamento.situacao,
-                    descricao = "Equipamento adicionado",
-                    observacao = null,
-                    importante = false
-                };
-
-                _context.Historicos.Add(historico);
                 await _context.SaveChangesAsync();
 
                 TempData["AddEquipment"] = true;
@@ -264,7 +265,7 @@ namespace SESOPtracker.Controllers
                         situacaoAtual = equipamento.situacao,
                         descricao = descricao,
                         observacao = observacao,
-                        importante = importante == "on" ? true : false
+                        importante = importante == "on" ? 1 : 0
                     };
 
                     _context.Historicos.Add(historico);
@@ -272,10 +273,10 @@ namespace SESOPtracker.Controllers
 
                     return RedirectToAction("Details", "Equipamentos", new { id = equipamento.patrimonio });
                 } catch (DbUpdateConcurrencyException) {
-                    if (!EquipamentoExists(equipamento.patrimonio)) {
-                        return NotFound();
-                    } else {
+                    if (await EquipamentoExists(equipamento.patrimonio)) {
                         throw;
+                    } else {
+                        return NotFound();
                     }
                 }
             }
@@ -329,12 +330,6 @@ namespace SESOPtracker.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EquipamentoExists(string id)
-        {
-            return _context.Equipamentos.Any(e => e.patrimonio == id);
-        }
-
-
         [HttpPost]
         public async Task<IActionResult> Import(IFormFile file) {
             if (file == null || file.Length == 0) {
@@ -379,11 +374,12 @@ namespace SESOPtracker.Controllers
                         }
 
                         // Verificar se o patrimônio já está cadastrado no sistema
-                        if (_context.Equipamentos.Any(e => e.patrimonio == patrimonio)) {
+                        if (await EquipamentoExists(patrimonio)) {
                             ModelState.AddModelError("patrimonio", $"O patrimônio {patrimonio} já está cadastrado no sistema.");
                             continue;
                         }
 
+                        var teste = worksheet.Cells[row, 6].Value;
                         var situacaoDescricao = worksheet.Cells[row, 7].Value?.ToString();
                         var situacao = await _context.Situacoes.FirstOrDefaultAsync(s => s.descricao == situacaoDescricao);
                         if (situacao == null) {
@@ -429,17 +425,6 @@ namespace SESOPtracker.Controllers
                         }
 
                         equipamentos.Add(equipamento);
-
-                        var historico = new Historico {
-                            patrimonio = equipamento.patrimonio,
-                            dataAlteracao = DateTime.Now.ToString("dd/MM/yyyy HH:mm"),
-                            situacaoAtual = equipamento.situacao,
-                            descricao = "Equipamento adicionado",
-                            observacao = null,
-                            importante = false
-                        };
-
-                        historicos.Add(historico);
                     }
                 }
             }
@@ -522,7 +507,7 @@ namespace SESOPtracker.Controllers
                 situacaoAtual = situacaoToBind,
                 descricao = "Vinculado ao equipamento '" + model.Equipment + "'",
                 observacao = null,
-                importante = false
+                importante = 0
             };
 
             equipmentToBind.situacao = situacaoToBind;
@@ -543,7 +528,7 @@ namespace SESOPtracker.Controllers
                 situacaoAtual = equipmentCurrent.situacao,
                 descricao = "Equipamento '" + model.ToBind + "' vinculado a este",
                 observacao = null,
-                importante = false
+                importante = 0
             };
 
             _context.Historicos.Add(historicoEquipmentCurrent);

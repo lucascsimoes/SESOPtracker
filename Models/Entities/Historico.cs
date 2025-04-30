@@ -25,7 +25,7 @@ namespace SESOPtracker.Models.Entities {
         public string? observacao { get; set; }
 
         [Display(Name = "Importante")]
-        public bool importante { get; set; } = false;
+        public int importante { get; set; } = 0;
 
 
 

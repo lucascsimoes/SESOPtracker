@@ -7,6 +7,7 @@ namespace SESOPtracker.Models.Entities {
         [Key]
         [Display(Name = "Patrimônio")]
         [Required(ErrorMessage = "O patrimônio é obrigatório")]
+        [Column("PATRIMONIO")]
         public string patrimonio { get; set; } = string.Empty;
 
         [Display(Name = "Item")]
@@ -31,10 +32,12 @@ namespace SESOPtracker.Models.Entities {
 
         [Display(Name = "Situação")]
         [Required(ErrorMessage = "A situacão é obrigatória")]
+        [Column("SITUACAO")]
         public int situacao { get; set; }
 
         [Display(Name = "Sala")]
         [Required(ErrorMessage = "A sala é obrigatória")]
+        [Column("SALA")]
         public int sala { get; set; }
 
         [Display(Name = "Tag")]

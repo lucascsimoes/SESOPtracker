@@ -62,7 +62,7 @@
                     @foreach (var item in Model) {
                         <tr 
                             onclick="location.href='@Url.Action("Details", new { id = item.patrimonio })'" 
-                            data-has-important="@item.Historico.Any(h => h.importante).ToString().ToLower()"
+                            data-has-important="@item.Historico.Any(h => h.importante == 1).ToString().ToLower()"
                             style="background: @item.Situacao.ToRgb(item.Situacao.cor + "10"); border-left: 3px solid @Html.DisplayFor(modelItem => item.Situacao.cor)"
                         >
                             <td>
@@ -89,9 +89,9 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.tag)
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Situacao.descricao)
-                            </td>
+                           <td>
+                               @Html.DisplayFor(modelItem => item.Situacao.descricao)
+                           </td>
                         </tr>
                     }
                 </tbody>
