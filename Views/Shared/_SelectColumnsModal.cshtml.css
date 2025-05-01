@@ -1,0 +1,54 @@
+﻿.modal .clickableContainer {
+    padding: 15px;
+    padding-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid hsl(var(--border));
+    margin-block: 10px;
+    cursor: pointer;
+    transition: background .3s;
+}
+
+.modal .row:has(.clickableContainer) {
+    margin: 0;
+}
+
+    .modal .clickableContainer:hover {
+        background: hsl(var(--input));
+        transition: background .3s;
+    }
+
+.modal #checkAllEquipmentList + label {
+    border: 1px solid white;
+    top: 3px;
+}
+
+.modal table > thead > tr {
+    top: -16px;
+}
+
+.modal .modal-body {
+    margin-top: 0;
+}
+
+.modal-content .export {
+    margin-block: 0 40px;
+}
+
+    .modal-content .export label {
+        font-size: 14px;
+    }
+
+    .modal-content > hr {
+        margin: 0 0 20px 0 !important;
+    }
+
+.modal:has(.clickableContainer) hr,
+.modal hr + .clickableContainer,
+.modal:has(.clickableContainer) .export {
+    width: calc(100% - 24px);
+    margin-inline: auto !important;
+}
+
+.modal:has(.clickableContainer) .export {
+    margin-top: 20px;
+}

@@ -22,6 +22,9 @@
             @foreach (var historico in Model.Historico.Reverse()) {
                 <div data-color="@historico.Situacao.cor">
                     <div>
+                        @if (@historico.alteradoPor != null) {
+                            <header title="@historico.alteradoPor"> @historico.alteradoPor.Split(" ")[0] </header>
+                        }
                         <span> Em @historico.dataAlteracao.Replace(" ", "  às ") </span>
                         @foreach (var item in historico.descricao.Split(", "))
                         {

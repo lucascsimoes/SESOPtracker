@@ -133,3 +133,13 @@ body {
     background-repeat: no-repeat;
     background-position: center;
 }
+
+::selection {
+    background-color: var(--primary-foreground);
+    color: white;
+}
+
+::-moz-selection {
+    background-color: var(--primary-foreground);
+    color: white;
+}

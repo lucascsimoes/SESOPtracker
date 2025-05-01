@@ -1,0 +1,100 @@
+﻿@{
+    var headerTitle = ViewData["HeaderTitle"] as string;
+}
+
+<div class="modal fade" id="selectColumnsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <header class="modal-header">
+            @if (!headerTitle!.Contains("Equipamento "))
+            {
+                <button class="btn-ghost" data-bs-target="#equipmentListModal" data-bs-toggle="modal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                    </svg>
+                </button>
+            }
+            </header>
+
+            <h2> Informe quais informações deseja exportar </h2>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="clickableContainer">
+                        <input type="checkbox" id="patrimonio" name="patrimonio" checked hidden />
+                        <label for="patrimonio"></label>
+                        <span> Patrimônio </span>
+                    </div>
+                    <div class="clickableContainer">
+                        <input type="checkbox" id="item" name="item" checked hidden />
+                        <label for="item"></label>
+                        <span> Item </span>
+                    </div>
+                    <div class="clickableContainer">
+                        <input type="checkbox" id="nome" name="nome" checked hidden />
+                        <label for="nome"></label>
+                        <span> Nome </span>
+                    </div>
+                    <div class="clickableContainer">
+                        <input type="checkbox" id="setor" name="setor" checked hidden />
+                        <label for="setor"></label>
+                        <span> Setor </span>
+                    </div>
+                    <div class="clickableContainer">
+                        <input type="checkbox" id="situacao" name="situacao" checked hidden />
+                        <label for="situacao"></label>
+                        <span> Situação </span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="clickableContainer">
+                        <input type="checkbox" id="subCategoria" name="subCategoria" checked hidden />
+                        <label for="subCategoria"></label>
+                        <span> Subcategoria </span>
+                    </div>
+                    <div class="clickableContainer">
+                        <input type="checkbox" id="categoria" name="categoria" checked hidden />
+                        <label for="categoria"></label>
+                        <span> Categoria </span>
+                    </div>
+                    <div class="clickableContainer">
+                        <input type="checkbox" id="sala" name="sala" checked hidden />
+                        <label for="sala"></label>
+                        <span> Sala </span>
+                    </div>
+                    <div class="clickableContainer">
+                        <input type="checkbox" id="tag" name="tag" checked hidden />
+                        <label for="tag"></label>
+                        <span> Tag </span>
+                    </div>
+                    <div class="clickableContainer">
+                        <input type="checkbox" id="dataCriacao" name="dataCriacao" checked hidden />
+                        <label for="dataCriacao"></label>
+                        <span> Data de criação </span>
+                    </div>
+                </div>
+            </div>
+			<hr />
+            <div class="clickableContainer">
+                <input type="checkbox" id="historico" name="historico" hidden />
+                <label for="historico"></label>
+                <span> Histórico </span>
+            </div>
+
+            @* <div class="export">
+                <label for="export-select"> Exportar como </label>
+                <fieldset>
+                    <select id="export-select">
+                        <option value="Excel" selected> Excel </option>
+                        <option value="CSV" disabled> CSV </option>
+                    </select>
+                </fieldset>
+            </div> *@
+
+            <footer class="modal-footer">
+                <button class="btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="submitRelatorio btn-default" data-bs-dismiss="modal"> Fazer download </button>
+            </footer>
+        </div>
+    </div>
+</div>

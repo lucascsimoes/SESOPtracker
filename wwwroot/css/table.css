@@ -12,6 +12,10 @@
         z-index: 1;
     }
 
+    .modal table > thead > tr {
+        top: -17px;
+    }
+
 table th {
     padding-block: 40px;
     background: hsl(var(--input)) !important;
@@ -20,6 +24,11 @@ table th {
     padding: 0 30px !important;
     border: none;
     font-size: 13px;
+}
+
+table th input + label {
+    border: 1px solid hsl(var(--foreground)) !important;
+    top: 3px;
 }
 
 table > tbody::before {

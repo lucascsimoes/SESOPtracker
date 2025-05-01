@@ -1,6 +1,6 @@
 ﻿.modal-content {
     background-color: hsl(var(--background));
-    padding: 20px;
+    padding: 20px 40px;
     border: 1px solid hsl(var(--border));
 }
 

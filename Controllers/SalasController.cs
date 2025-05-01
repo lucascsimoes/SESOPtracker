@@ -56,6 +56,9 @@ namespace SESOPtracker.Controllers
         // GET: Salas
         public IActionResult Index()
         {
+
+            ViewData["Permissoes"] = PermissoesController.GetPermissao();
+
             List<Sala> salas = new List<Sala>();
 
             try
@@ -96,6 +99,8 @@ namespace SESOPtracker.Controllers
         // GET: Salas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewData["Permissoes"] = PermissoesController.GetPermissao();
+
             if (id == null)
             {
                 return NotFound();

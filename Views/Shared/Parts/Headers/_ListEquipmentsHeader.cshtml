@@ -1,7 +1,7 @@
 ﻿ @model IEnumerable<SESOPtracker.Models.Entities.Equipamento>
 
 @{
-    var viewBy = ViewData["viewBy"] as string;
+    var role = ViewData["Permissoes"] as SESOPtracker.Models.Entities.Permissao;
 }
 
 <div class="searchbar">
@@ -10,8 +10,12 @@
         <input placeholder="Pesquise por um equipamento" />
     </fieldset>
 </div>
-<hr class="hl-vertical" />
-<a class="btn-default" asp-action="Create" asp-controller="Equipamentos">
-    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
-    Adicionar equipamento
-</a>
+@if (role != null && role.permPatrimonio != null && role.permPatrimonio != 1)
+{
+    <hr class="hl-vertical" />
+    <a class="btn-default" asp-action="Create" asp-controller="Equipamentos">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14" /><path d="M12 5v14" /></svg>
+        Adicionar equipamento
+    </a>
+}
+

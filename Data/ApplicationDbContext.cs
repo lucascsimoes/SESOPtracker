@@ -11,6 +11,7 @@ namespace SESOPtracker.Data {
         public DbSet<Situacao> Situacoes { get; set; }
         public DbSet<Equipamento> Equipamentos { get; set; }
         public DbSet<Historico> Historicos { get; set; }
+        public DbSet<Permissao> Permissoes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -95,9 +96,23 @@ namespace SESOPtracker.Data {
                     .HasColumnName("DESCRICAO");
                 entity.Property(e => e.observacao)
                     .HasColumnName("OBSERVACAO");
+                entity.Property(e => e.alteradoPor)
+                    .HasColumnName("ALTERADOPOR");
                 entity.Property(e => e.importante)
                     .HasColumnName("IMPORTANTE")
                     .HasConversion<int>();
+            });
+
+            modelBuilder.Entity<Permissao>(entity =>
+            {
+                entity.ToTable("ADMINISTRADORES_ESAJ");
+                entity.HasKey(e => e.codpess);
+                entity.Property(e => e.codpess)
+                    .HasColumnName("CODPESS");
+                entity.Property(e => e.grupo)
+                    .HasColumnName("GRUPO");
+                entity.Property(e => e.permPatrimonio)
+                    .HasColumnName("PERMPATRIMONIO");
             });
         }
     }

@@ -56,12 +56,16 @@ namespace SESOPtracker.Controllers
         // GET: Situacoes
         public async Task<IActionResult> Index()
         {
+            ViewData["Permissoes"] = PermissoesController.GetPermissao();
+
             return View(await _context.Situacoes.ToListAsync());
         }
 
         // GET: Situacoes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            ViewData["Permissoes"] = PermissoesController.GetPermissao();
+
             if (id == null)
             {
                 return NotFound();

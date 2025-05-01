@@ -21,22 +21,22 @@
         element.style.setProperty("--color", color);
     });
 
-    if (localStorage.getItem("theme") == "dark") {
-        document.querySelector("html").setAttribute("data-bs-theme", "dark")
-    } else {
-        document.querySelector("html").setAttribute("data-bs-theme", "light")
-    }
+    //if (localStorage.getItem("theme") == "dark") {
+    //    document.querySelector("html").setAttribute("data-bs-theme", "dark")
+    //} else {
+    //    document.querySelector("html").setAttribute("data-bs-theme", "light")
+    //}
 
-    const themeBtn = document.getElementById("changeTheme")
-    themeBtn.addEventListener("click", () => {
-        const theme = document.querySelector("html").getAttribute("data-bs-theme")
-        if (theme == "light") {
-            document.querySelector("html").setAttribute("data-bs-theme", "dark")
-            localStorage.setItem("theme", "dark")
-        } else {
-            document.querySelector("html").setAttribute("data-bs-theme", "light")
-            localStorage.setItem("theme", "light")
-        }
+    //const themeBtn = document.getElementById("changeTheme")
+    //themeBtn.addEventListener("click", () => {
+    //    const theme = document.querySelector("html").getAttribute("data-bs-theme")
+    //    if (theme == "light") {
+    //        document.querySelector("html").setAttribute("data-bs-theme", "dark")
+    //        localStorage.setItem("theme", "dark")
+    //    } else {
+    //        document.querySelector("html").setAttribute("data-bs-theme", "light")
+    //        localStorage.setItem("theme", "light")
+    //    }
         
-    })
+    //})
 });

@@ -42,9 +42,40 @@ namespace SESOPtracker.Controllers
             return false;
         }
 
-        // GET: Equipamentos
-        public async Task<IActionResult> Index(string viewBy)
+        private string AlteradoPor(int codpess)
         {
+            var nompess = "";
+
+            try
+            {
+                OracleConnection conn = Conexao.GetConexao();
+                string sql = "select p.nompess from administradores_esaj a join pessoa p on a.codpess = p.codpess where a.codpess = :codpess";
+                OracleCommand cmd = new OracleCommand(sql, conn);
+                conn.Open();
+                cmd.Parameters.Add(new OracleParameter("codpess", codpess));
+                OracleDataReader rd = cmd.ExecuteReader();
+
+                rd.Read();
+                nompess = rd["nompess"].ToString() ?? "";
+                rd.Close();
+
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro de SQL: " + ex.Message);
+            }
+
+            return nompess;
+        }
+
+        // GET: Equipamentos
+        public IActionResult Index()
+        {
+            ViewData["Permissoes"] = PermissoesController.GetPermissao();
 
             ViewData["StatusList"] = new SelectList(_context.Situacoes, "situacaoId", "descricao");
             ViewData["SalasList"] = new SelectList(_context.Salas, "salaId", "local");
@@ -63,6 +94,8 @@ namespace SESOPtracker.Controllers
         // GET: Equipamentos/Details/5
         public async Task<IActionResult> Details(string id)
         {
+            ViewData["Permissoes"] = PermissoesController.GetPermissao();
+
             if (id == null)
             {
                 return NotFound();
@@ -256,6 +289,9 @@ namespace SESOPtracker.Controllers
 
             if (ModelState.IsValid) {
                 try {
+
+                    var nompess = AlteradoPor(PermissoesController.codpess);
+
                     _context.Update(equipamento);
                     await _context.SaveChangesAsync();
 
@@ -265,6 +301,7 @@ namespace SESOPtracker.Controllers
                         situacaoAtual = equipamento.situacao,
                         descricao = descricao,
                         observacao = observacao,
+                        alteradoPor = nompess,
                         importante = importante == "on" ? 1 : 0
                     };
 
@@ -484,63 +521,5 @@ namespace SESOPtracker.Controllers
                 return StatusCode(500, "Ocorreu um erro ao buscar os equipamentos.");
             }
         }
-
-        [HttpPost]
-        public async Task<IActionResult> BindEquipmentsAsync([FromBody] BindEquipmentsModel model) {
-            if (model == null || string.IsNullOrEmpty(model.ToBind) || string.IsNullOrEmpty(model.Equipment)) {
-                return BadRequest("Os dados enviados são inválidos.");
-            }
-
-            var equipmentToBind = await _context.Equipamentos.FirstOrDefaultAsync(e => e.patrimonio == model.ToBind);
-            var situacaoToBind = await _context.Situacoes
-                .Where(s => s.descricao == "Transferido")
-                .Select(s => s.situacaoId)
-                .FirstOrDefaultAsync();
-
-            if (situacaoToBind == 0) {
-                return BadRequest("A situação 'Transferido' não foi encontrada.");
-            }
-
-            var historicoEquipmentToBind = new Historico {
-                patrimonio = equipmentToBind!.patrimonio,
-                dataAlteracao = DateTime.Now.ToString("dd/MM/yyyy HH:mm"),
-                situacaoAtual = situacaoToBind,
-                descricao = "Vinculado ao equipamento '" + model.Equipment + "'",
-                observacao = null,
-                importante = 0
-            };
-
-            equipmentToBind.situacao = situacaoToBind;
-
-            _context.Equipamentos.Update(equipmentToBind);
-            await _context.SaveChangesAsync();
-
-            _context.Historicos.Add(historicoEquipmentToBind);
-            await _context.SaveChangesAsync();
-
-
-
-            var equipmentCurrent = await _context.Equipamentos.FirstOrDefaultAsync(e => e.patrimonio == model.Equipment);
-
-            var historicoEquipmentCurrent = new Historico {
-                patrimonio = equipmentCurrent!.patrimonio,
-                dataAlteracao = DateTime.Now.ToString("dd/MM/yyyy HH:mm"),
-                situacaoAtual = equipmentCurrent.situacao,
-                descricao = "Equipamento '" + model.ToBind + "' vinculado a este",
-                observacao = null,
-                importante = 0
-            };
-
-            _context.Historicos.Add(historicoEquipmentCurrent);
-            await _context.SaveChangesAsync();
-
-            return Ok();
-        }
-
-        public class BindEquipmentsModel {
-            public string ToBind { get; set; } // Equipamento a ser vinculado
-            public string Equipment { get; set; } // Equipamento atual
-        }
-
     }
 }

@@ -18,7 +18,6 @@
 
 export function countRows(table) {
     const count = table.querySelectorAll("tbody input[type=checkbox]:checked").length
-    console.log(table.querySelectorAll("tbody input[type=checkbox]:checked"))
     document.querySelector(".modal-footer > p").textContent = `${count} ${count === 1 ? "equipamento selecionado" : "equipamentos selecionados"}`
 
     if (count > 0) {

@@ -27,6 +27,9 @@ namespace SESOPtracker.Models.Entities {
         [Display(Name = "Importante")]
         public int importante { get; set; } = 0;
 
+        [Display(Name = "Alterado por")]
+        public string? alteradoPor { get; set; }
+
 
 
         [ForeignKey("situacaoAtual")]
